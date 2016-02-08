@@ -17,17 +17,15 @@ Main files:
 Invoke example:
 
 var gallery = new Gallery({
-
     data: jsonData,
     thumbsIconClass: 'iconRpl gridIcon',
     closeIconClass: 'iconRpl closeIcon'
-
 }).render();
 
 
 JSON data example:
 
-[
+var jsonData = [
     {
         name: 'slika 1',
         large: 'http://www.omnihotels.com/-/media/images/globals/activities/skiing-86491418.jpg?h=660&la=en&w=1170',
