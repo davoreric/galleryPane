@@ -26,7 +26,7 @@
 
         /* render method */
 
-        render: function() {
+        render: function(data) {
 
             this.$gallery = $('<section id="' + this.options.wrapId + '"></section>');
 
@@ -48,9 +48,7 @@
 
             this.events();
 
-            this.setPosition({
-                data: 'onRender'
-            });
+            this.setPosition(data);
 
             $('body').append(this.$gallery);
 
@@ -140,7 +138,7 @@
             if (this.options.historyAPI) {
 
                 this.updateHistory({
-                    type: (data.type === 'onRender') ? 'push' : 'replace',
+                    type: 'push',
                     title: 'novo',
                     url: this.options.data[this.options.position].url
                 });
