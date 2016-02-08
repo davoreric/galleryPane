@@ -24,7 +24,7 @@
 
     $.extend(gallery.prototype, {
 
-        /* render methods */
+        /* render method */
 
         render: function() {
 
@@ -47,7 +47,10 @@
             }
 
             this.events();
-            this.setPosition();
+
+            this.setPosition({
+                data: 'onRender'
+            });
 
             $('body').append(this.$gallery);
 
@@ -103,13 +106,12 @@
 
         },
 
-        setPosition: function(pos) {
+        setPosition: function(data) {
 
-            console.log(pos);
+            // update position or use default value
+            if (typeof data !== 'undefined' && Number.isInteger(data)) {
 
-            if (typeof pos !== 'undefined') {
-
-                this.options.position = pos;
+                this.options.position = data;
 
             }
 
@@ -134,6 +136,18 @@
 
             this.$items[this.options.position].addClass('active');
 
+            //set history API state
+            if (this.options.historyAPI) {
+
+                this.updateHistory({
+                    type: (data.type === 'onRender') ? 'push' : 'replace',
+                    title: 'novo',
+                    url: this.options.data[this.options.position].url
+                });
+
+            }
+
+            //enables chaining
             return this;
 
         },
@@ -143,6 +157,22 @@
         slider: function() {
 
             //console.log('slider');
+
+        },
+
+        /* history API method */
+
+        updateHistory: function(data) {
+
+            if (data.type == 'replace') {
+
+                history.replaceState({order: 0}, data.title, this.options.rootUrl + data.url);
+
+            } else if (data.type == 'push') {
+
+                history.pushState({order: 0}, data.title, this.options.rootUrl + data.url);
+
+            }
 
         },
 
@@ -238,6 +268,9 @@
     /* default values */
 
     gallery.defaults = {
+
+        rootUrl: '',
+        historyAPI: true,
 
         wrapId: 'galleryModule',
         thumbsIconClass: '',

@@ -64,4 +64,5 @@
 
 #galleryModule .social .item {
   display: table-cell;
+  cursor: pointer;
 }
