@@ -1,5 +1,5 @@
 # galleryPane
-Standalone gallery pane module with swipe slider and social integration
+Standalone gallery pane module with swipe slider and social integration. Supports AMD and CommonJS module integration.
 
 # Demo install
 - git clone

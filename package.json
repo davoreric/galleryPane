@@ -23,5 +23,7 @@
     "grunt-include-replace": "^3.2.0",
     "load-grunt-tasks": "^0.6.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "jquery": ">=1.7"
+  }
 }
