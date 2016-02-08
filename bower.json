@@ -1,0 +1,29 @@
+{
+  "name": "gallery-module",
+  "version": "0.1.0",
+  "homepage": "https://github.com/davoreric/gallery",
+  "authors": [
+    "Davor Eric <info@davoreric.com>"
+  ],
+  "description": "Gallery module",
+  "main": "dist/gallery.min.js",
+  "keywords": [
+    "popup",
+    "lightbox",
+    "modal"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "bourbon": "~4.2.3"
+  },
+  "dependencies": {
+    "jquery": ">=1.7"
+  }
+}

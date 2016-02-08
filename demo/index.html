@@ -1,0 +1,56 @@
+<html>
+    <head>
+
+        <title>Gallery demo page</title>
+
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,800&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+        <link href="resources/css/demo.css"  rel="stylesheet" />
+        <link href="../dist/gallery.css"  rel="stylesheet" />
+        
+    </head>
+    <body>
+
+        <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="../dist/script.js"></script>
+
+        <script>
+            var jsonData = [
+                {
+                    name: 'slika 1',
+                    large: 'http://www.omnihotels.com/-/media/images/globals/activities/skiing-86491418.jpg?h=660&la=en&w=1170',
+                    thumb: 'http://www.omnihotels.com/-/media/images/globals/activities/skiing-86491418.jpg?h=660&la=en&w=1170',
+                    social: {
+                        facebook: { count: 12 }
+                    }
+                },
+                {
+                    name: 'slika 2',
+                    large: 'http://i.telegraph.co.uk/multimedia/archive/02777/skiing_2777599b.jpg',
+                    thumb: 'http://i.telegraph.co.uk/multimedia/archive/02777/skiing_2777599b.jpg',
+                    social: {
+                        facebook: { count: 225 }
+                    }
+                },
+                {
+                    name: 'slika 3',
+                    large: 'http://gossipgenie.com/wp-content/uploads/2014/01/Alpine-Skiing.jpg',
+                    thumb: 'http://gossipgenie.com/wp-content/uploads/2014/01/Alpine-Skiing.jpg',
+                    social: {
+                        facebook: { count: 145 }
+                    }
+                }
+            ];
+        </script>
+
+        <script>
+            var gallery = new Gallery({
+
+                data: jsonData,
+                thumbsIconClass: 'iconRpl gridIcon',
+                closeIconClass: 'iconRpl closeIcon'
+                
+            }).render();
+        </script>
+
+    </body>
+</html>
