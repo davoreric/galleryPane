@@ -6,7 +6,7 @@
     "Davor Eric <info@davoreric.com>"
   ],
   "description": "Gallery module",
-  "main": "dist/gallery.min.js",
+  "main": "dist/gallery-pane.min.js",
   "keywords": [
     "popup",
     "lightbox",
@@ -24,6 +24,8 @@
     "bourbon": "~4.2.3"
   },
   "dependencies": {
-    "jquery": ">=1.7"
+    "jquery": ">=1.7",
+    "pelinkovac": "~0.1.1",
+    "swipe-js": "~2.0.8"
   }
 }

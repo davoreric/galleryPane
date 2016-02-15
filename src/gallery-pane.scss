@@ -1,0 +1,199 @@
+@import 'node_modules/bourbon/app/assets/stylesheets/bourbon';
+@import 'node_modules/pelinkovac/scss/all';
+
+.gpElement {
+
+    position: relative; height: 100vh;
+    background-color: #000;
+
+}
+
+.gpHeader {
+
+    height: 7em; position: relative;
+    background-color: #1b1b1b;
+
+}
+
+.gpCloseBtn, .gpToggleThumbsBtn {
+
+    @include normalizeButton;
+    font-size: 1em;
+    position: absolute; right: 0; top: 0; bottom: 0; width: 7em;
+    text-indent: -999em; border-left: 1px solid #000;
+
+    &:before {
+
+        font-size: em(35,10); content: "×"; position: absolute; left: 0; right: 0; top: 0;
+        line-height: em(70,35); text-align: center; text-indent: 0;
+        color: #fff;
+
+    }
+
+}
+
+.gpToggleThumbsBtn {
+
+    right: 7.1em; &:before { content: '\229E'; }
+
+}
+
+.gpPages {
+
+    font-size: 1.5em; font-weight: bold;
+    position: absolute; left: 50%; top: 0;
+    line-height: em(70,15); width: em(100,15); margin: 0 0 0 em(-100/2,15);
+    text-align: center; color: #fff;
+
+}
+
+.gpBrand {
+
+    @include ellipsis;
+    font-size: 1.7em; font-weight: bold;
+    position: absolute; left: 0; top: 0; right: 20em; line-height: em(70,17);
+    box-sizing: border-box; padding: 0 em(15,17);
+    color: #fff;
+
+}
+
+.gpItems {
+
+    position: relative; overflow-x: hidden; visibility: hidden;
+    position: absolute; left: 0; right: 0; top: 7em; bottom: 0;
+
+
+    > ul {
+
+        position: relative; overflow: hidden; padding: 0; margin: 0; height: 100%;
+
+        > li {
+
+            float: left; width:100%; position: relative; overflow: hidden; height: 100%;
+            text-align: center;
+
+            &:before {
+                content: ""; display: inline-block; height: 100%; vertical-align: middle;
+            }
+
+        }
+
+    }
+
+}
+
+.gpItem {
+
+    position: relative; display: inline-block; vertical-align: middle; margin: 0px auto;
+    box-sizing: border-box; z-index: 2020; text-align: left; max-width: 100%;
+
+    > img {
+
+        display: block; width: auto; max-width: 100%; height: auto; line-height: 0;
+        box-sizing: border-box; margin: 0 auto; padding: 1em;
+
+    }
+
+}
+
+.gpArrow {
+
+    @include normalizeButton;
+    position: absolute; top: 50%; width: 7em; height: 7em;
+    text-indent: -999em; background-color: rgba(#000, 0.3);
+
+    &:before {
+
+        font-size: em(40,10);
+        position: absolute; left: 0; top: 0; right: 0;
+        color: #fff; text-indent: 0; text-align: center; line-height: em(65,40);
+
+    }
+
+}
+
+.gpArrowPrev {
+
+    left: 0; &:before { content: '\2039'; }
+
+}
+
+.gpArrowNext {
+
+    right: 0; &:before { content: '\203A'; }
+
+}
+
+/* gallery layout styles */
+#galleryModule {
+
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    display: block; box-sizing: border-box;
+
+    .head {
+
+        position: absolute; top: 0; right: 0; left: 0;
+
+    }
+
+    .thumbs {
+
+        display: none;
+
+    }
+
+    &.thumbsActive .thumbs {
+
+        display: block; overflow: auto;
+
+        .wrap {
+
+            display: table;
+
+            .item {
+
+                display: table-cell; cursor: pointer;
+
+            }
+
+        }
+
+    }
+
+    .media {
+
+        height: 100%;
+
+        .item {
+
+            display: none; height: 100%;
+
+            &.active {
+
+                display: block;
+
+            }
+
+            img {
+
+                margin: 0 auto; display: block; max-height: 100%; max-width: 100%;
+
+            }
+
+        }
+
+    }
+
+    .social {
+
+        position: absolute; bottom: 0; left: 0; display: table; width: 100%;
+
+        .item {
+
+            display: table-cell; cursor: pointer;
+
+        }
+
+    }
+
+}

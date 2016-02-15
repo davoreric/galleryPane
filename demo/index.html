@@ -5,71 +5,72 @@
 
         <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,800&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
         <link href="resources/css/demo.css"  rel="stylesheet" />
-        <link href="../dist/gallery.css"  rel="stylesheet" />
+        <link href="../dist/gallery-pane.css"  rel="stylesheet" />
 
     </head>
     <body>
 
-        <h1>Gallery pane demo page</h1>
-
-        <ul class="links">
-            <li>Lorem ipsum <a href="/slika-1" data-img="1">slika 1</a></li>
-            <li>Dolor sit ament <a href="/slika-2" data-img="2">slika 2</a></li>
-            <li>Per astra ad astra <a href="/slika-3" data-img="3">slika 3</a></li>
-        </ul>
-
         <script src="../bower_components/jquery/dist/jquery.min.js"></script>
-        <script src="../dist/script.js"></script>
+        <script src="../bower_components/swipe-js/swipe.js"></script>
+        <script src="../dist/gallery-pane-2.js"></script>
 
         <script>
-            var jsonData = [
-                {
-                    name: 'slika 1',
-                    large: 'http://www.omnihotels.com/-/media/images/globals/activities/skiing-86491418.jpg?h=660&la=en&w=1170',
-                    thumb: 'http://www.omnihotels.com/-/media/images/globals/activities/skiing-86491418.jpg?h=660&la=en&w=1170',
-                    url: '/slika-1',
-                    social: {
-                        facebook: { count: 12 }
-                    }
-                },
-                {
-                    name: 'slika 2',
-                    large: 'http://i.telegraph.co.uk/multimedia/archive/02777/skiing_2777599b.jpg',
-                    thumb: 'http://i.telegraph.co.uk/multimedia/archive/02777/skiing_2777599b.jpg',
-                    url: '/slika-2',
-                    social: {
-                        facebook: { count: 225 }
-                    }
-                },
-                {
-                    name: 'slika 3',
-                    large: 'http://gossipgenie.com/wp-content/uploads/2014/01/Alpine-Skiing.jpg',
-                    thumb: 'http://gossipgenie.com/wp-content/uploads/2014/01/Alpine-Skiing.jpg',
-                    url: '/slika-3',
-                    social: {
-                        facebook: { count: 145 }
-                    }
-                }
-            ];
+
+            var galleryItems = [{
+                title: 'slika 1',
+                largeImage: 'images/1big.jpg',
+                smallImage: 'images/1small.jpg',
+                url: '/slika-1',
+                social: [
+                    {className: 'facebook', count: 12, url: 'http://www.test.com'}
+                ]
+            }, {
+                title: 'slika 2',
+                largeImage: 'images/2big.jpg',
+                smallImage: 'images/2small.jpg',
+                url: '/slika-2',
+                social: [
+                    {className: 'facebook', count: 12, url: 'http://www.test.com'}
+                ]
+            }, {
+                title: 'slika 3',
+                largeImage: 'images/3big.jpg',
+                smallImage: 'images/3small.jpg',
+                url: '/slika-2',
+                social: [
+                    {className: 'facebook', count: 12, url: 'http://www.test.com'}
+                ]
+            }, {
+                title: 'slika 4',
+                largeImage: 'images/4big.jpg',
+                smallImage: 'images/4small.jpg',
+                url: '/slika-2',
+                social: [
+                    {className: 'facebook', count: 12, url: 'http://www.test.com'}
+                ]
+            }, {
+                title: 'slika 5',
+                largeImage: 'images/5big.jpg',
+                smallImage: 'images/5small.jpg',
+                url: '/slika-2',
+                social: [
+                    {className: 'facebook', count: 12, url: 'http://www.test.com'}
+                ]
+            }, {
+                title: 'slika 6',
+                largeImage: 'images/6big.jpg',
+                smallImage: 'images/6small.jpg',
+                url: '/slika-3',
+                social: [
+                    {className: 'facebook', count: 12, url: 'http://www.test.com'}
+                ]
+            }];
         </script>
 
         <script>
 
-            var gallery = new Gallery({
-
-                data: jsonData,
-                rootUrl: '/demo',
-                historyAPI: false,
-                thumbsIconClass: 'iconRpl gridIcon',
-                closeIconClass: 'iconRpl closeIcon'
-
-            });
-
-            $('.links a').on('click', function(e) {
-
-                e.preventDefault();
-                gallery.render( $(this).data('img') - 1 );
-
+            var gallery = new GalleryPane({
+                items: galleryItems
             });
 
         </script>

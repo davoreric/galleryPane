@@ -1,4 +1,4 @@
-@import '../../../bower_components/bourbon/app/assets/stylesheets/bourbon';
+@import 'node_modules/bourbon/app/assets/stylesheets/bourbon';
 @import 'fonts.scss';
 
 /* global styles */
@@ -15,6 +15,12 @@ body {
 
 }
 
+body {
+
+    font-size: 1em;
+
+}
+
 /* gallery custom styles */
 #galleryModule {
 
@@ -28,7 +34,7 @@ body {
         background: url(../../images/logo.png); position: absolute; top: 2em; left: 2em; cursor: pointer;
 
         @media only screen and ( min-resolution: 192dpi) {
-            
+
             background: url(../../images/logo@2x.png);
             background-size: 111px 30px;
 
@@ -52,7 +58,7 @@ body {
         &:hover {
 
             opacity: .8;
-            
+
         }
 
     }
@@ -76,7 +82,7 @@ body {
     }
 
     .closeButton {
-        
+
         right: 0;
 
         &:before {

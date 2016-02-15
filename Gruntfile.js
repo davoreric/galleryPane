@@ -14,10 +14,7 @@ module.exports = function(grunt) {
                     src: '**/*.js',
                     dest: 'dist',
                     ext: '.min.js'
-                }],
-                options: {
-
-                }
+                }]
             }
         },
 
@@ -55,24 +52,26 @@ module.exports = function(grunt) {
         sass: {
             min: {
                 files: {
-                    'dist/gallery.min.css': 'src/gallery.scss',
+                    'dist/gallery-pane.min.css': 'src/gallery-pane.scss',
                     'demo/resources/css/demo.min.css': 'demo/resources/scss/demo.scss'
                 },
                 options: {
                     outputStyle: 'compressed',
                     sourceMap: false,
-                    precision: 5
+                    precision: 5,
+                    includePaths: ['node_modules']
                 }
             },
             expanded: {
                 files: {
-                    'dist/gallery.css': 'src/gallery.scss',
+                    'dist/gallery-pane.css': 'src/gallery-pane.scss',
                     'demo/resources/css/demo.css': 'demo/resources/scss/demo.scss'
                 },
                 options: {
                     outputStyle: 'expanded',
                     sourceMap: false,
-                    precision: 5
+                    precision: 5,
+                    includePaths: ['node_modules']
                 }
             }
         },

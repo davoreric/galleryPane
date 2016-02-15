@@ -100,6 +100,10 @@ body {
   padding: 0;
 }
 
+body {
+  font-size: 1em;
+}
+
 /* gallery custom styles */
 #galleryModule {
   /* general */

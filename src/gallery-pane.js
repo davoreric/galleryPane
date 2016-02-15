@@ -10,39 +10,43 @@
 
     } else {
 
-        root.Gallery = factory(jQuery);
+        root.GalleryPane = factory(jQuery);
 
     }
 
 }(this, function($) {
 
-    function gallery(data) {
+    function Gallery() {
 
-        this.options = $.extend({}, gallery.defaults, data);
+        this.initialize.apply(this, arguments);
 
     }
 
-    $.extend(gallery.prototype, {
+    $.extend(Gallery.prototype, {
 
-        /* render method */
+        initialize: function(options) {
+
+            this.options = $.extend({}, Gallery.defaults, options);
+
+        },
 
         render: function(data) {
 
-            this.$gallery = $('<section id="' + this.options.wrapId + '"></section>');
+            this.$el = $('<section id="' + this.options.wrapId + '"></section>');
 
-            this.headerTemplate().appendTo(this.$gallery);
-            this.itemsTemplate().appendTo(this.$gallery);
+            this.headerTemplate().appendTo(this.$el);
+            this.itemsTemplate().appendTo(this.$el);
 
             if (this.options.data.length) {
 
-                this.thumbsTemplate().appendTo(this.$gallery);
+                this.thumbsTemplate().appendTo(this.$el);
                 this.slider();
 
             }
 
             if (this.options.social) {
 
-                this.socialTemplate().appendTo(this.$gallery);
+                this.socialTemplate().appendTo(this.$el);
 
             }
 
@@ -50,7 +54,7 @@
 
             this.setPosition(data);
 
-            $('body').append(this.$gallery);
+            $('body').append(this.$el);
 
             //enables chaining on invoke
             return this;
@@ -61,11 +65,11 @@
 
         events: function() {
 
-            this.$gallery.on('click', '.closeButton', this.close.bind(this));
-            this.$gallery.on('click', '.thumbButton', this.toggleThumbs.bind(this));
+            this.$el.on('click', '.closeButton', this.close.bind(this));
+            this.$el.on('click', '.thumbButton', this.toggleThumbs.bind(this));
 
-            this.$gallery.on('click', '.thumbs .item', this.thumbClick.bind(this));
-            this.$gallery.on('dblclick', '.thumbs .item', this.thumbDblclick.bind(this));
+            this.$el.on('click', '.thumbs .item', this.thumbClick.bind(this));
+            this.$el.on('dblclick', '.thumbs .item', this.thumbDblclick.bind(this));
 
         },
 
@@ -73,7 +77,7 @@
 
         toggleThumbs: function() {
 
-            this.$gallery.toggleClass('thumbsActive');
+            this.$el.toggleClass('thumbsActive');
 
         },
 
@@ -100,7 +104,7 @@
 
         close: function() {
 
-            this.$gallery.remove();
+            this.$el.remove();
 
         },
 
@@ -265,7 +269,7 @@
 
     /* default values */
 
-    gallery.defaults = {
+    Gallery.defaults = {
 
         rootUrl: '',
         historyAPI: true,
@@ -293,6 +297,6 @@
 
     };
 
-    return gallery;
+    return Gallery;
 
 }));
