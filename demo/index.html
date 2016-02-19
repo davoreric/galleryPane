@@ -12,66 +12,31 @@
 
         <script src="../bower_components/jquery/dist/jquery.min.js"></script>
         <script src="../bower_components/swipe-js/swipe.js"></script>
+        <script src="../dist/scroll-slider.js"></script>
         <script src="../dist/gallery-pane-2.js"></script>
 
         <script>
 
-            var galleryItems = [{
-                title: 'slika 1',
-                largeImage: 'images/1big.jpg',
-                smallImage: 'images/1small.jpg',
-                url: '/slika-1',
-                social: [
-                    {className: 'facebook', count: 12, url: 'http://www.test.com'}
-                ]
-            }, {
-                title: 'slika 2',
-                largeImage: 'images/2big.jpg',
-                smallImage: 'images/2small.jpg',
-                url: '/slika-2',
-                social: [
-                    {className: 'facebook', count: 12, url: 'http://www.test.com'}
-                ]
-            }, {
-                title: 'slika 3',
-                largeImage: 'images/3big.jpg',
-                smallImage: 'images/3small.jpg',
-                url: '/slika-2',
-                social: [
-                    {className: 'facebook', count: 12, url: 'http://www.test.com'}
-                ]
-            }, {
-                title: 'slika 4',
-                largeImage: 'images/4big.jpg',
-                smallImage: 'images/4small.jpg',
-                url: '/slika-2',
-                social: [
-                    {className: 'facebook', count: 12, url: 'http://www.test.com'}
-                ]
-            }, {
-                title: 'slika 5',
-                largeImage: 'images/5big.jpg',
-                smallImage: 'images/5small.jpg',
-                url: '/slika-2',
-                social: [
-                    {className: 'facebook', count: 12, url: 'http://www.test.com'}
-                ]
-            }, {
-                title: 'slika 6',
-                largeImage: 'images/6big.jpg',
-                smallImage: 'images/6small.jpg',
-                url: '/slika-3',
-                social: [
-                    {className: 'facebook', count: 12, url: 'http://www.test.com'}
-                ]
-            }];
-        </script>
+            var galleryItems = [];
 
-        <script>
+            for (var i = 0; i < 20; i++) {
+                galleryItems.push({
+                    title: 'slika ' + i,
+                    largeImage: 'images/large/' + i + '.jpg',
+                    smallImage: 'images/small/' + i + '.jpg',
+                    url: '/slika-' + i + '',
+                    social: [
+                        {className: 'facebook', count: 12, url: 'http://www.test.com'},
+                        {className: 'twitter', count: 12, url: 'http://www.test.com'}
+                    ]
+                });
+            }
 
             var gallery = new GalleryPane({
                 items: galleryItems
             });
+
+            gallery.showThumbnails();
 
         </script>
 

@@ -1,14 +1,14 @@
 (function(root, factory) {
 
     if (typeof define === 'function' && define.amd) {
-        define(['jquery', 'swipejs'], factory);
+        define(['jquery', 'swipejs', 'scroll-slider'], factory);
     } else if (typeof module === 'object' && module.exports) {
-        module.exports = factory(require('jquery', 'swipejs'));
+        module.exports = factory(require('jquery'), require('swipejs'), require('scroll-slider'));
     } else {
-        root.GalleryPane = factory(jQuery, window.Swipe);
+        root.GalleryPane = factory(jQuery, window.Swipe, window.ScrollSlider);
     }
 
-}(this, function($, Swipe) {
+}(this, function($, Swipe, ScrollSlider) {
 
     var instanceCounter = 0,
         $window = $(window),
@@ -37,6 +37,45 @@
 
     }
 
+    Gallery.defaults = {
+
+        elementClassName: 'gpElement',
+        headerClassName: 'gpHeader',
+        closeBtnClassName: 'gpCloseBtn',
+        pagesClassName: 'gpPages',
+        brandingClassName: 'gpBrand',
+        itemsWrapClassName: 'gpItems',
+        itemClassName: 'gpItem',
+        itemImageClassName: 'gpItemImage',
+
+        toggleThumbsBtnClassName: 'gpToggleThumbsBtn',
+        thumbsWrapClassName: 'gpThumbs',
+        thumbsScrollerClassName: 'gpThumbsScroller',
+        thumbClassName: 'gpThumb',
+        thumbsOpenedClassName: 'gpThumbsActive',
+        thumbActiveClassName: 'gpThumbActive',
+        arrowsClassName: 'gpArrows',
+        arrowNextClassName: 'gpArrow gpArrowNext',
+        arrowPrevClassName: 'gpArrow gpArrowPrev',
+        arrowDisabledClassName: 'gpArrowDisabled',
+
+        brandingText: 'Gallery pane',
+        toggleThumbsBtnText: 'Toggle thumbs',
+        closeBtnText: 'Close gallery',
+
+        appendTarget: 'body',
+
+        items: [],
+        position: 0,
+        continuous: false,
+        slideSpeed: 300,
+        navigateWithKeys: true,
+        closeOnEscapeKey: true,
+
+        afterRender: null
+
+    };
+
     $.extend(Gallery.prototype, {
 
         initialize: function(options) {
@@ -56,8 +95,10 @@
 
             this.$el = $(this.templates.main(this.options));
 
-            if (this.options.items.length) {
-                $(this.templates.arrows(this.options)).appendTo(this.$el);
+            if (this.options.items.length > 1) {
+                this.$arrowsCont = $(this.templates.arrows(this.options)).appendTo(this.$el);
+                this.$arrowNext = this.$arrowsCont.find(selectorFromClass(this.options.arrowNextClassName));
+                this.$arrowPrev = this.$arrowsCont.find(selectorFromClass(this.options.arrowPrevClassName));
             }
 
             this.$swipeEl = this.$el.find(selectorFromClass(this.options.itemsWrapClassName));
@@ -66,14 +107,14 @@
 
             this.$el.appendTo(this.options.appendTarget);
 
-            this.setImageDimensions();
-
             this.swipe = new Swipe(this.$swipeEl.get(0), {
                 startSlide: this.position,
                 speed: this.options.slideSpeed,
                 continuous: false
                 // callback: function(index, elem) {},
             });
+
+            this.updateDom().setImageDimensions();
 
             this.options.afterRender && this.options.afterRender(this);
 
@@ -94,18 +135,18 @@
 
         setupEvents: function() {
 
-            this.setEvent(this.$el, 'click', 'thumbClassName', function(e) {
-
-                this.setPosition(this.$thumbs.index($(e.currentTarget)));
-
-            });
-
             this.setEvent(this.$el, 'click', 'toggleThumbsBtnClassName', this.toggleThumbnails);
             this.setEvent(this.$el, 'click', 'arrowNextClassName', this.next);
             this.setEvent(this.$el, 'click', 'arrowPrevClassName', this.prev);
             this.setEvent(this.$el, 'click', 'closeBtnClassName', this.close);
-
             this.setEvent($window, 'resize', null, this.setImageDimensions);
+
+            this.setEvent(this.$el, 'click', 'thumbClassName', function(e) {
+
+                var $selectedThumb = $(e.currentTarget);
+                this.setPosition(this.$thumbs.index($selectedThumb));
+
+            });
 
             this.setEvent($document, 'keyup', null, function(e) {
 
@@ -123,9 +164,9 @@
         normalizePosition: function(position) {
 
             if (position >= this.options.items.length) {
-                return 0;
+                return this.options.continuous ? 0 : this.position;
             } else if (position < 0) {
-                return this.options.items.length - 1;
+                return this.options.continuous ? this.options.items.length - 1 : this.position;
             } else {
                 return position;
             }
@@ -166,14 +207,35 @@
             if (newPosition !== this.position) {
 
                 this.position = newPosition;
+
                 this.swipe.slide(newPosition);
+                this.updateDom();
                 this.loadImage(newPosition, true);
-
-                this.$pagination.text((newPosition + 1) + '/' + this.options.items.length);
-
                 this.options.afterPositionChange && this.options.afterPositionChange(this);
 
             }
+
+        },
+
+        updateDom: function() {
+
+            if (this.thumbsSlider) {
+                this.thumbsSlider.scrollTo(this.position);
+                this.$thumbs.removeClass(this.options.thumbActiveClassName)
+                            .eq(this.position)
+                            .addClass(this.options.thumbActiveClassName);
+            }
+
+            // update arrows
+            if (!this.options.continuous && this.$arrowsCont) {
+                this.$arrowNext.toggleClass(this.options.arrowDisabledClassName, this.position === this.options.items.length - 1);
+                this.$arrowPrev.toggleClass(this.options.arrowDisabledClassName, this.position === 0);
+            }
+
+            // update pagination
+            this.$pagination.text((this.position + 1) + '/' + this.options.items.length);
+
+            return this;
 
         },
 
@@ -191,24 +253,39 @@
 
         toggleThumbnails: function() {
 
-            this.$el.hasClass(this.options.thumbsActiveClassName) ? this.hideThumbNails() : this.showThumbnails();
+            this.$el.hasClass(this.options.thumbsOpenedClassName) ? this.hideThumbNails() : this.showThumbnails();
 
         },
 
         showThumbnails: function() {
 
-            if (!this.$thumbs) {
-                $(this.templates.thumbs(this.options)).appendTo(this.$el);
-                this.$thumbs = this.$el.find(selectorFromClass(this.options.thumbClassName));
+            this.$el.addClass(this.options.thumbsOpenedClassName);
+
+            if (!this.thumbsSlider) {
+
+                this.thumbsSlider = new ScrollSlider($(this.templates.thumbs(this.options)).appendTo(this.$el), $.extend({}, {
+
+                    arrowWrapClass: 'gpScrollSliderArrows',
+                    arrowNextClass: 'gpScrollSliderArrowNext',
+                    arrowPrevClass: 'gpScrollSliderArrowPrev',
+                    arrowDisabledClass: 'gpScrollSliderArrowDisabled',
+                    hasArrowsClass: 'gpScrollSliderHasArrows',
+                    touchClass: 'gpScrollSliderTouch'
+
+                }));
+
+                this.$thumbs = this.thumbsSlider.$el.find(selectorFromClass(this.options.thumbClassName));
+                this.$thumbs.eq(this.position).addClass(this.options.thumbActiveClassName);
+
             }
 
-            this.$el.addClass(this.options.thumbsActiveClassName);
+            this.thumbsSlider.scrollTo(this.position);
 
         },
 
         hideThumbNails: function() {
 
-            this.$el.removeClass(this.options.thumbsActiveClassName);
+            this.$el.removeClass(this.options.thumbsOpenedClassName);
 
         },
 
@@ -226,7 +303,7 @@
                 return '<div class="' + data.elementClassName + '">' +
                             '<div class="' + data.headerClassName + '">' +
                                 '<div class="' + data.brandingClassName + '">' + data.brandingText + '</div>' +
-                                '<p class="' + data.pagesClassName + '">' + (data.position + 1) + '/' + data.items.length + '</p>' +
+                                '<p class="' + data.pagesClassName + '"></p>' +
                                 '<button type="button" title="' + data.toggleThumbsBtnText + '" class="' + data.toggleThumbsBtnClassName + '">' + data.toggleThumbsBtnText + '</button>' +
                                 '<button type="button" title="' + data.closeBtnText + '" class="' + data.closeBtnClassName + '">' + data.closeBtnText + '</button>' +
                             '</div>' +
@@ -245,15 +322,17 @@
             },
             thumbs: function(data) {
                 return '<div class="' + data.thumbsWrapClassName + '">' +
-                            '<ul>' +
-                                joinText(data.items, function(item) {
-                                    return '<li>' +
-                                                '<div class="' + data.thumbClassName + '">' +
-                                                    '<img src="' + item.smallImage + '" alt="' + item.title + '" />' +
-                                                '</div>' +
-                                            '</li>';
-                                }) +
-                            '</ul>' +
+                            '<div class="' + data.thumbsScrollerClassName + '">' +
+                                '<ul>' +
+                                    joinText(data.items, function(item) {
+                                        return '<li>' +
+                                                    '<div class="' + data.thumbClassName + '">' +
+                                                        '<img src="' + item.smallImage + '" alt="' + item.title + '" />' +
+                                                    '</div>' +
+                                                '</li>';
+                                    }) +
+                                '</ul>' +
+                            '</div>' +
                         '</div>';
             },
             arrows: function(data) {
@@ -265,44 +344,6 @@
         }
 
     });
-
-    /* default values */
-
-    Gallery.defaults = {
-
-        elementClassName: 'gpElement',
-        headerClassName: 'gpHeader',
-        closeBtnClassName: 'gpCloseBtn',
-        pagesClassName: 'gpPages',
-        brandingClassName: 'gpBrand',
-        itemsWrapClassName: 'gpItems',
-        itemClassName: 'gpItem',
-        itemImageClassName: 'gpItemImage',
-
-        toggleThumbsBtnClassName: 'gpToggleThumbsBtn',
-        thumbsWrapClassName: 'gpThumbs',
-        thumbClassName: 'gpThumb',
-
-        arrowsClassName: 'gpArrows',
-        arrowNextClassName: 'gpArrow gpArrowNext',
-        arrowPrevClassName: 'gpArrow gpArrowPrev',
-
-        brandingText: 'Gallery pane',
-        toggleThumbsBtnText: 'Toggle thumbs',
-        closeBtnText: 'Close gallery',
-
-        appendTarget: 'body',
-
-        items: [],
-        position: 0,
-        continuous: true,
-        slideSpeed: 300,
-        navigateWithKeys: true,
-        closeOnEscapeKey: true,
-
-        afterRender: null
-
-    };
 
     return Gallery;
 
