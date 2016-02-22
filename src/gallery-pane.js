@@ -1,7 +1,7 @@
 (function(root, factory) {
 
     if (typeof define === 'function' && define.amd) {
-        define(['jquery', 'swipejs', 'scroll-slider'], factory);
+        define(['jquery', 'swipejs', './scroll-slider'], factory);
     } else if (typeof module === 'object' && module.exports) {
         module.exports = factory(require('jquery'), require('swipejs'), require('./scroll-slider'));
     } else {
