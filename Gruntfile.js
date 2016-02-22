@@ -93,6 +93,15 @@ module.exports = function(grunt) {
                     spawn: false
                 }
             }
+        },
+
+        bump: {
+            options: {
+                files: ['package.json', 'bower.json'],
+                commitFiles: ['package.json', 'bower.json'],
+                tagName: '%VERSION%',
+                push: false
+            }
         }
 
     });
