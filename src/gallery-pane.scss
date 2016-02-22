@@ -100,7 +100,7 @@
 
     @include normalizeButton;
     position: absolute; top: 50%; width: 5em; height: 6em;;
-    text-indent: -999em; background-color: rgba(#000, 0.1);
+    text-indent: -999em;
 
     &:before {
 
@@ -190,7 +190,17 @@
 
 }
 
+.gpScrollSliderArrows {
 
+    display: none;
+
+    .gpScrollSliderHasArrows > & {
+
+        display: block;
+
+    }
+
+}
 
 .gpScrollSliderArrowNext, .gpScrollSliderArrowPrev {
 

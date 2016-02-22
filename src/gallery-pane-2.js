@@ -72,7 +72,16 @@
         navigateWithKeys: true,
         closeOnEscapeKey: true,
 
-        afterRender: null
+        afterRender: null,
+
+        scrollSlider: {
+            arrowWrapClass: 'gpScrollSliderArrows',
+            arrowNextClass: 'gpScrollSliderArrowNext',
+            arrowPrevClass: 'gpScrollSliderArrowPrev',
+            arrowDisabledClass: 'gpScrollSliderArrowDisabled',
+            hasArrowsClass: 'gpScrollSliderHasArrows',
+            touchClass: 'gpScrollSliderTouch'
+        }
 
     };
 
@@ -80,7 +89,7 @@
 
         initialize: function(options) {
 
-            this.options = $.extend({}, Gallery.defaults, options);
+            this.options = $.extend(true, {}, Gallery.defaults, options);
             this.position = this.options.position;
             this.ens = '.GalleryPane' + (++instanceCounter);
 
@@ -263,16 +272,7 @@
 
             if (!this.thumbsSlider) {
 
-                this.thumbsSlider = new ScrollSlider($(this.templates.thumbs(this.options)).appendTo(this.$el), $.extend({}, {
-
-                    arrowWrapClass: 'gpScrollSliderArrows',
-                    arrowNextClass: 'gpScrollSliderArrowNext',
-                    arrowPrevClass: 'gpScrollSliderArrowPrev',
-                    arrowDisabledClass: 'gpScrollSliderArrowDisabled',
-                    hasArrowsClass: 'gpScrollSliderHasArrows',
-                    touchClass: 'gpScrollSliderTouch'
-
-                }));
+                this.thumbsSlider = new ScrollSlider($(this.templates.thumbs(this.options)).appendTo(this.$el), this.options.scrollSlider);
 
                 this.$thumbs = this.thumbsSlider.$el.find(selectorFromClass(this.options.thumbClassName));
                 this.$thumbs.eq(this.position).addClass(this.options.thumbActiveClassName);

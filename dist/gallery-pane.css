@@ -154,7 +154,6 @@
   width: 5em;
   height: 6em;
   text-indent: -999em;
-  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .gpArrow::-moz-focus-inner {
@@ -270,6 +269,14 @@
 
 .gpThumb.gpThumbActive {
   border-color: #C9393C;
+}
+
+.gpScrollSliderArrows {
+  display: none;
+}
+
+.gpScrollSliderHasArrows > .gpScrollSliderArrows {
+  display: block;
 }
 
 .gpScrollSliderArrowNext, .gpScrollSliderArrowPrev {

@@ -43,7 +43,7 @@
         arrowNextText: 'Next',
 
         continuous: false,
-        isTouch: false
+        isTouch: 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0
     };
 
     $.extend(ScrollSlider.prototype, {
@@ -61,6 +61,8 @@
 
             this.setup();
             this.setupEvents();
+
+            console.log(this);
 
         },
 
@@ -190,10 +192,15 @@
                 itemOffset = $item.offset().left - this.$items.eq(0).offset().left,
                 diffToCurrentOffset = itemOffset - this.slideOffset;
 
-            if (diffToCurrentOffset + $item.outerWidth() > this.elSize) {
-                this.slideNext();
-            } else if (diffToCurrentOffset < 0) {
-                this.slidePrev();
+            if (this.options.isTouch) {
+                this.offset = itemOffset;
+                this.animate(itemOffset);
+            } else {
+                if (diffToCurrentOffset + $item.outerWidth() > this.elSize) {
+                    this.slideNext();
+                } else if (diffToCurrentOffset < 0) {
+                    this.slidePrev();
+                }
             }
 
         },
@@ -232,6 +239,7 @@
 
             }
 
+            console.log(this.animatedElWidth, this.elSize);
             this.$el.toggleClass(options.hasArrowsClass, this.animatedElWidth >= this.elSize);
 
             if (!this.options.continuous) {
