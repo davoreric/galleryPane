@@ -97,6 +97,10 @@
   bottom: 0;
 }
 
+.gpHasSocialLinks > .gpItems {
+  bottom: 5em;
+}
+
 .gpItems > ul {
   position: relative;
   overflow: hidden;
@@ -333,6 +337,38 @@
 .gpScrollSliderArrowDisabled {
   opacity: 0;
   cursor: auto;
+}
+
+.gpSocial {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+}
+
+.gpSocial > a {
+  font-size: 2em;
+  display: inline-block;
+  width: 3em;
+  line-height: 2.5em;
+  margin: 0 0.05em;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  background-color: #C9393C;
+}
+
+.gpSocial > .facebook {
+  background-color: #3B5998;
+}
+
+.gpSocial > .twitter {
+  background-color: #55acee;
+}
+
+.gpSocial > .googlePlus {
+  background-color: #DC4E41;
 }
 
 @-webkit-keyframes gpThumbsOpenAnimation {

@@ -62,6 +62,11 @@
     position: relative; overflow-x: hidden; visibility: hidden;
     position: absolute; left: 0; right: 0; top: 6em; bottom: 0;
 
+    .gpHasSocialLinks > & {
+
+        bottom: 5em;
+
+    }
 
     > ul {
 
@@ -234,6 +239,23 @@
 .gpScrollSliderArrowDisabled {
 
     opacity: 0; cursor: auto;
+
+}
+
+.gpSocial {
+
+    position: absolute; left: 0; right: 0; bottom: 0; text-align: center;
+
+    > a {
+
+        font-size: 2em; display: inline-block; width: 3em; line-height: em(50,20); margin: 0 em(1,20);
+        color: #fff; text-decoration: none; font-weight: bold; background-color: #C9393C;
+
+    }
+
+    > .facebook { background-color: #3B5998; }
+    > .twitter { background-color: #55acee; }
+    > .googlePlus { background-color: #DC4E41; }
 
 }
 

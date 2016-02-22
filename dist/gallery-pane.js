@@ -59,6 +59,9 @@
         arrowPrevClassName: 'gpArrow gpArrowPrev',
         arrowDisabledClassName: 'gpArrowDisabled',
 
+        socialLinksClassName: 'gpSocial',
+        hasSocialLinksClassName: 'gpHasSocialLinks',
+
         brandingText: 'Gallery pane',
         toggleThumbsBtnText: 'Toggle thumbs',
         closeBtnText: 'Close gallery',
@@ -114,6 +117,7 @@
             this.$swipeEl = this.$el.find(selectorFromClass(this.options.itemsWrapClassName));
             this.$itemImages = this.$el.find(selectorFromClass(this.options.itemImageClassName));
             this.$pagination = this.$el.find(selectorFromClass(this.options.pagesClassName));
+            this.$socialLinks = $('<div>').addClass(this.options.socialLinksClassName).appendTo(this.$el);
 
             this.$el.appendTo(this.options.appendTarget);
 
@@ -253,25 +257,39 @@
 
             }
 
+            data.title && (document.title = data.title);
+
         },
 
         updateDom: function() {
 
+            var options = this.options,
+                item = options.items[this.position];
+
+            // thumbs
             if (this.thumbsSlider) {
                 this.thumbsSlider.scrollTo(this.position);
                 this.$thumbs.removeClass(this.options.thumbActiveClassName)
                             .eq(this.position)
-                            .addClass(this.options.thumbActiveClassName);
+                            .addClass(options.thumbActiveClassName);
             }
 
-            // update arrows
+            // arrows
             if (!this.options.continuous && this.$arrowsCont) {
                 this.$arrowNext.toggleClass(this.options.arrowDisabledClassName, this.position === this.options.items.length - 1);
                 this.$arrowPrev.toggleClass(this.options.arrowDisabledClassName, this.position === 0);
             }
 
-            // update pagination
-            this.$pagination.text((this.position + 1) + '/' + this.options.items.length);
+            // pagination
+            this.$pagination.text((this.position + 1) + '/' + options.items.length);
+
+            // social links
+            if (item.socialLinks && item.socialLinks.length > 0) {
+                this.$el.addClass(options.hasSocialLinksClassName);
+                this.$socialLinks.html(this.templates.socialLinks(item.socialLinks));
+            } else {
+                this.$el.removeClass(options.hasSocialLinksClassName);
+            }
 
             return this;
 
@@ -374,6 +392,11 @@
                             '<button type="button" class="' + data.arrowNextClassName + '"></button>' +
                             '<button type="button" class="' + data.arrowPrevClassName + '"></button>' +
                         '</div>';
+            },
+            socialLinks: function(items) {
+                return joinText(items, function(item) {
+                    return '<a href="' + item.url + '" class="' + item.className + '" title="' + item.title + '">' + item.title + '</a>';
+                });
             }
         }
 
