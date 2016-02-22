@@ -1,11 +1,11 @@
 {
-  "name": "gallery-module",
+  "name": "gallery-pane",
   "version": "0.1.1",
   "homepage": "https://github.com/davoreric/gallery",
   "authors": [
     "Davor Eric <info@davoreric.com>"
   ],
-  "description": "Gallery module",
+  "description": "Standalone gallery pane module with swipe slider and social integration",
   "main": "dist/gallery-pane.min.js",
   "keywords": [
     "popup",
