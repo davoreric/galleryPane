@@ -5,14 +5,14 @@
     } else if (typeof module === 'object' && module.exports) {
         module.exports = factory(require('jquery'), require('swipejs'), require('./scroll-slider'));
     } else {
-        root.GalleryPane = factory(jQuery, window.Swipe, window.ScrollSlider);
+        root.GalleryPane = factory(root.jQuery, root.Swipe, root.ScrollSlider);
     }
 
 }(this, function($, Swipe, ScrollSlider) {
 
     var instanceCounter = 0,
-        $window = $(window),
-        $document = $(window.document);
+        $window = $(this),
+        $document = $(this.document);
 
     function selectorFromClass(classes) {
 
