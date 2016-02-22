@@ -62,8 +62,6 @@
             this.setup();
             this.setupEvents();
 
-            console.log(this);
-
         },
 
         setup: function() {
@@ -239,7 +237,6 @@
 
             }
 
-            console.log(this.animatedElWidth, this.elSize);
             this.$el.toggleClass(options.hasArrowsClass, this.animatedElWidth >= this.elSize);
 
             if (!this.options.continuous) {

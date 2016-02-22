@@ -13,18 +13,18 @@
         <script src="../bower_components/jquery/dist/jquery.min.js"></script>
         <script src="../bower_components/swipe-js/swipe.js"></script>
         <script src="../dist/scroll-slider.js"></script>
-        <script src="../dist/gallery-pane-2.js"></script>
+        <script src="../dist/gallery-pane.js"></script>
 
         <script>
 
             var galleryItems = [];
 
-            for (var i = 0; i < 10; i++) {
+            for (var i = 0; i < 19; i++) {
                 galleryItems.push({
                     title: 'slika ' + i,
                     largeImage: 'images/large/' + i + '.jpg',
                     smallImage: 'images/small/' + i + '.jpg',
-                    url: '/slika-' + i + '',
+                    url: window.location.href + 'slika-' + i + '',
                     social: [
                         {className: 'facebook', count: 12, url: 'http://www.test.com'},
                         {className: 'twitter', count: 12, url: 'http://www.test.com'}
