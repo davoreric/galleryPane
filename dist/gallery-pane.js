@@ -77,6 +77,7 @@
         updateUrl: true,
 
         afterRender: null,
+        afterPositionChange: null,
 
         scrollSlider: {
             arrowWrapClass: 'gpScrollSliderArrows',
@@ -101,6 +102,11 @@
 
             this.loadImage(this.position, true);
             this.setupEvents();
+
+            this.options.updateUrl && this.updateUrl({
+                url: this.options.items[this.position].url,
+                title: this.options.items[this.position].title
+            });
 
         },
 
