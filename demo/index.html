@@ -24,7 +24,7 @@
                     title: 'slika ' + i,
                     largeImage: 'images/large/' + i + '.jpg',
                     smallImage: 'images/small/' + i + '.jpg',
-                    url: window.location.href + 'slika-' + i + '',
+                    // url: window.location.href + 'slika-' + i + '',
                     socialLinks: [
                         {className: 'facebook', title: "f", url: 'http://www.test.com/' + i},
                         {className: 'twitter', title: "t", url: 'http://www.test.com/' + i},
@@ -32,6 +32,13 @@
                     ]
                 });
             }
+
+            galleryItems.push({
+                title: 'video',
+                videoUrl: 'https://www.youtube.com/embed/qtQgbdmIO30',
+                smallImage: 'images/small/' + 5 + '.jpg'
+                // url: window.location.href + 'slika-' + i + ''
+            });
 
             var gallery = new GalleryPane({
                 items: galleryItems

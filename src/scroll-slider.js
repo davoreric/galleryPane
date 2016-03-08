@@ -10,8 +10,9 @@
 
 }(this, function($) {
 
-    var instanceCounter = 0,
-        $window = $(window);
+    var root = this,
+        instanceCounter = 0,
+        $window = $(root);
 
     function selectorFromClass(classes) {
 
@@ -201,6 +202,8 @@
                 }
             }
 
+            return this;
+
         },
 
         animate: function(offset) {
@@ -217,12 +220,11 @@
 
             if (!this.$arrows) {
 
-                this.$arrows = $(
-                    '<div class="' + this.options.arrowWrapClass + '">\
-                        <button type="button" class="' + this.options.arrowNextClass + '">' + this.options.arrowNextText + '</button>\
-                        <button type="button" class="' + this.options.arrowPrevClass + '">' + this.options.arrowPrevText + '</button>\
-                    </div>'
-                ).appendTo(this.$el).on('click' + this.ens, 'button', function(e) {
+                this.$arrows = $('<div>').addClass(this.options.arrowWrapClass);
+                this.$arrowNext = $('<button type="button" class="' + options.arrowNextClass + '">' + options.arrowNextText + '</button>').appendTo(this.$arrows);
+                this.$arrowPrev = $('<button type="button" class="' + options.arrowPrevClass + '">' + options.arrowPrevText + '</button>').appendTo(this.$arrows);
+
+                this.$arrows.appendTo(this.$el).on('click' + this.ens, 'button', function(e) {
 
                     var $arrow = $(e.target);
 
@@ -231,9 +233,6 @@
                     }
 
                 });
-
-                this.$arrowNext = this.$arrows.find(selectorFromClass(options.arrowNextClass));
-                this.$arrowPrev = this.$arrows.find(selectorFromClass(options.arrowPrevClass));
 
             }
 
@@ -252,15 +251,22 @@
 
             $window.off(this.ens);
             this.$el.off(this.ens);
-
             this.$arrows && this.$arrows.remove();
-
-            return this;
 
         }
 
     });
 
-    return ScrollSlider;
+    $.ScrollSlider = ScrollSlider;
+
+    $.fn.scrollSlider = function(options) {
+        return this.each(function() {
+            if (!$.data(this, 'scrollSlider')) {
+                $.data(this, 'scrollSlider', new ScrollSlider(this, options));
+            }
+        });
+    };
+
+    return $;
 
 }));

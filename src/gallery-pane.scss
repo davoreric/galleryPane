@@ -101,6 +101,19 @@
 
 }
 
+.gpVideoItem {
+
+    width: 80em; height: 0; overflow: hidden; padding-top: 56.25%; margin: 5em 0;
+
+    > iframe {
+
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        box-shadow: 0 0.2em 1em rgba(#000, 0.6); background: #000;
+
+    }
+
+}
+
 .gpArrow {
 
     @include normalizeButton;
@@ -244,7 +257,7 @@
 
 .gpSocial {
 
-    position: absolute; left: 0; right: 0; bottom: 0; text-align: center;
+    position: absolute; left: 0; right: 0; bottom: 0; text-align: center; display: none;
 
     > a {
 
@@ -256,6 +269,8 @@
     > .facebook { background-color: #3B5998; }
     > .twitter { background-color: #55acee; }
     > .googlePlus { background-color: #DC4E41; }
+
+    .gpHasSocialLinks & { display: block; }
 
 }
 

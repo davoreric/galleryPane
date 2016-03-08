@@ -5,10 +5,10 @@
     } else if (typeof module === 'object' && module.exports) {
         module.exports = factory(require('jquery'), require('swipejs'), require('./scroll-slider'));
     } else {
-        root.GalleryPane = factory(root.jQuery, root.Swipe, root.ScrollSlider);
+        root.GalleryPane = factory(root.jQuery, root.Swipe);
     }
 
-}(this, function($, Swipe, ScrollSlider) {
+}(this, function($, Swipe) {
 
     var instanceCounter = 0,
         $window = $(this),
@@ -46,6 +46,7 @@
         brandingClassName: 'gpBrand',
         itemsWrapClassName: 'gpItems',
         itemClassName: 'gpItem',
+        videoItemClassName: 'gpVideoItem',
         itemImageClassName: 'gpItemImage',
 
         toggleThumbsBtnClassName: 'gpToggleThumbsBtn',
@@ -208,15 +209,19 @@
                 normalizedPosition = this.normalizePosition(position),
                 url = this.options.items[normalizedPosition].largeImage;
 
-            this.$itemImages.eq(normalizedPosition).attr('src', url);
+            if (url) {
 
-            if (loadAdjecent) {
-                image.onload = function() {
-                    self.loadImage(position + 1).loadImage(position - 1);
-                };
+                this.$itemImages.eq(normalizedPosition).attr('src', url);
+
+                if (loadAdjecent) {
+                    image.onload = function() {
+                        self.loadImage(position + 1).loadImage(position - 1);
+                    };
+                }
+
+                image.src = url;
+
             }
-
-            image.src = url;
 
             return this;
 
@@ -325,7 +330,7 @@
 
             if (!this.thumbsSlider) {
 
-                this.thumbsSlider = new ScrollSlider($(this.templates.thumbs(this.options)).appendTo(this.$el), this.options.scrollSlider);
+                this.thumbsSlider = new $.ScrollSlider($(this.templates.thumbs(this.options)).appendTo(this.$el), this.options.scrollSlider);
 
                 this.$thumbs = this.thumbsSlider.$el.find(selectorFromClass(this.options.thumbClassName));
                 this.$thumbs.eq(this.position).addClass(this.options.thumbActiveClassName);
@@ -358,6 +363,9 @@
 
         templates: {
             main: function(data) {
+
+                var self = this;
+
                 return '<div class="' + data.elementClassName + '">' +
                             '<div class="' + data.headerClassName + '">' +
                                 '<div class="' + data.brandingClassName + '">' + data.brandingText + '</div>' +
@@ -368,15 +376,31 @@
                             '<div class="' + data.itemsWrapClassName + '">' +
                                 '<ul>' +
                                     joinText(data.items, function(item) {
-                                        return '<li>' +
-                                                    '<div class="' + data.itemClassName + '">' +
-                                                        '<img class="' + data.itemImageClassName + '" data-src="' + item.largeImage + '" alt="' + item.title + '" />' +
-                                                    '</div>' +
-                                                '</li>';
+                                        return self.slideItem(data, item);
                                     }) +
                                 '</ul>' +
                             '</div>' +
                         '</div>';
+            },
+            slideItem: function(data, item) {
+
+                if (item.videoUrl) {
+                    return '<li>' +
+                                '<div class="' + data.itemClassName + '">' +
+                                    '<div class="' + data.videoItemClassName + '">' +
+                                        '<iframe frameborder="0" allowfullscreen src="' + item.videoUrl + '"></iframe>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</li>';
+
+                } else {
+                    return '<li>' +
+                                '<div class="' + data.itemClassName + '">' +
+                                    '<img class="' + data.itemImageClassName + '" data-src="' + item.largeImage + '" alt="' + item.title + '" />' +
+                                '</div>' +
+                            '</li>';
+                }
+
             },
             thumbs: function(data) {
                 return '<div class="' + data.thumbsWrapClassName + '">' +
