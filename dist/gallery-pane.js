@@ -61,11 +61,17 @@
         arrowDisabledClassName: 'gpArrowDisabled',
 
         socialLinksClassName: 'gpSocial',
+        toggleSocialLinksBtnClassName: 'gpToggleSocialBtn',
+        toggleSocialLinksWrapClassName: 'gpWrapSocialLinks',
+        socialLinksOpenedClassName: 'gpSocialActive',
         hasSocialLinksClassName: 'gpHasSocialLinks',
 
         brandingText: 'Gallery pane',
         toggleThumbsBtnText: 'Toggle thumbs',
+        toggleSocialLinksBtnText: 'Toggle social links',
         closeBtnText: 'Close gallery',
+        sourceLabelText: 'Source',
+        authorLabelText: 'Author',
 
         appendTarget: 'body',
 
@@ -76,6 +82,7 @@
         navigateWithKeys: true,
         closeOnEscapeKey: true,
         updateUrl: true,
+        toggleSocialLinks: false,
 
         afterRender: null,
         afterPositionChange: null,
@@ -179,6 +186,12 @@
                 }
 
             });
+
+            if (this.options.toggleSocialLinks) {
+
+                this.setEvent(this.$el, 'click', 'toggleSocialLinksBtnClassName', this.toggleSocialLinks);
+
+            }
 
             this.options.updateUrl && this.setEvent($window, 'popstate', null, this.close);
 
@@ -297,7 +310,7 @@
             // social links
             if (item.socialLinks && item.socialLinks.length > 0) {
                 this.$el.addClass(options.hasSocialLinksClassName);
-                this.$socialLinks.html(this.templates.socialLinks(item.socialLinks));
+                this.$socialLinks.html(this.templates.socialLinks(item.socialLinks, this.options));
             } else {
                 this.$el.removeClass(options.hasSocialLinksClassName);
             }
@@ -315,6 +328,12 @@
         prev: function() {
 
             this.setPosition(this.position - 1);
+
+        },
+
+        toggleSocialLinks: function() {
+
+            this.$el.toggleClass(this.options.socialLinksOpenedClassName);
 
         },
 
@@ -397,8 +416,11 @@
                     return '<li>' +
                                 '<div class="' + data.itemClassName + '">' +
                                     '<img class="' + data.itemImageClassName + '" data-src="' + item.largeImage + '" alt="' + item.title + '" />' +
+                                    '<strong class="gpCaption">' + item.title + '</strong>' +
+                                    ((item.source || item.author) ? '<strong class="gpCopy">' + ((item.source) ? data.sourceLabelText + ': ' + item.source : '') + ((item.source && item.author) ? ' / ' : '') + ((item.author) ? data.authorLabelText + ': ' + item.author : '') + '</strong>' : '') +
                                 '</div>' +
                             '</li>';
+
                 }
 
             },
@@ -423,10 +445,18 @@
                             '<button type="button" class="' + data.arrowPrevClassName + '"></button>' +
                         '</div>';
             },
-            socialLinks: function(items) {
-                return joinText(items, function(item) {
+            socialLinks: function(items, data) {
+
+                var template = joinText(items, function(item) {
                     return '<a href="' + item.url + '" class="' + item.className + '" title="' + item.title + '">' + item.title + '</a>';
                 });
+
+                if (data.toggleSocialLinks) {
+                    return '<button type="button" class="' + data.toggleSocialLinksBtnClassName + '">' + data.toggleSocialLinksBtnText + '</button><div class="' + data.toggleSocialLinksWrapClassName + '">' + template + '<div>';
+                } else {
+                    return template;
+                }
+
             }
         }
 
