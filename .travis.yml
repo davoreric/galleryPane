@@ -5,7 +5,3 @@ node_js:
 
 install:
   - npm install -g nightwatch
-
-branches:
-  only:
-    - /^v[0-9]/
