@@ -1,0 +1,168 @@
+@import 'node_modules/bourbon/app/assets/stylesheets/bourbon';
+@import 'fonts.scss';
+
+/* global styles */
+html {
+
+    font-size: 62.5%; font-family: 'Open Sans', sans-serif;
+
+}
+
+html,
+body {
+
+    margin: 0; padding: 0;
+
+}
+
+body {
+
+    font-size: 1em;
+
+}
+
+/* gallery custom styles */
+#galleryModule {
+
+    /* general */
+    background: #1b1b1b; padding: 8.8em 2em 8em 2em;
+
+    /* header area */
+    .brand {
+
+        width: em(111,10); height: em(30,10); text-indent: -9999px;
+        background: url(../../images/logo.png); position: absolute; top: 2em; left: 2em; cursor: pointer;
+
+        @media only screen and ( min-resolution: 192dpi) {
+
+            background: url(../../images/logo@2x.png);
+            background-size: 111px 30px;
+
+        }
+
+    }
+
+    .page {
+
+        font-size: em(16,10); line-height: (30/16); font-weight: 400; color: #fff;
+        text-align: center; display: block; padding: em(20,16); letter-spacing: 1;
+
+    }
+
+    .thumbButton,
+    .closeButton {
+
+        width: em(68,10); position: absolute; top: 0; bottom: 0;
+        cursor: pointer; color: #fff; text-align: center;
+
+        &:hover {
+
+            opacity: .8;
+
+        }
+
+    }
+
+    .thumbButton {
+
+        right: em(68,10);
+
+        &:before {
+
+            font-size: em(20,10); line-height: (72/20);
+
+        }
+
+    }
+
+    &.thumbsActive .thumbButton {
+
+        background: #000;
+
+    }
+
+    .closeButton {
+
+        right: 0;
+
+        &:before {
+
+            font-size: em(30,10); line-height: (68/30);
+
+        }
+
+    }
+
+    /* thumbs area */
+
+    .thumbs {
+
+        position: absolute; top: em(70,10); right: 0; left: 0; z-index: 2;
+        background: #000;
+
+        .wrap {
+
+            border-spacing: 10px;
+
+        }
+
+        .item img {
+
+            display: block; width: 109px; height: 109px;
+
+        }
+
+        .active img {
+
+            border: 2px solid #eb1a3e; width: 105px; height: 105px;
+
+        }
+
+    }
+
+    /* content area */
+
+    /* social area */
+    .social {
+
+        border-spacing: 5px;
+
+        .item {
+
+            padding: 2em;
+
+        }
+
+        .facebookBlock {
+
+            background: #3b5998;
+
+        }
+
+        .twitterBlock {
+
+            background: #4099ff;
+
+        }
+
+        .gPlusBlock {
+
+            background: #d34836;
+
+        }
+
+        .viberBlock {
+
+            background: #7c529d;
+
+        }
+
+        .mailBlock {
+
+            background: #fd9e36;
+
+        }
+
+    }
+
+}

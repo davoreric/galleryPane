@@ -1,0 +1,41 @@
+{
+  "name": "swipe-js",
+  "version": "2.0.9",
+  "main": [
+    "./swipe.js"
+  ],
+  "author": "Brad Birdsall",
+  "license": "MIT",
+  "ignore": [
+    "**/*.html",
+    "**/*.css",
+    "Gruntfile.js",
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "icons",
+    "sass",
+    "vendor"
+  ],
+  "homepage": "https://github.com/lyfeyaj/swipe",
+  "authors": [
+    "Felix Liu <lyfeyaj@gmail.com> (http://lyfyeaj.com/)"
+  ],
+  "description": "Swipe is the most accurate touch slider",
+  "keywords": [
+    "swipe",
+    "slider",
+    "touch"
+  ],
+  "_release": "2.0.9",
+  "_resolution": {
+    "type": "version",
+    "tag": "2.0.9",
+    "commit": "bd5e10f9bdd1660d3ffbaab51cccf1b220e1d81f"
+  },
+  "_source": "https://github.com/lyfeyaj/swipe.git",
+  "_target": "~2.0.8",
+  "_originalSource": "swipe-js"
+}

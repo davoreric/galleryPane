@@ -1,0 +1,62 @@
+<html>
+    <head>
+
+        <title>Gallery demo page</title>
+
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,800&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+        <link href="https://rawgit.com/davoreric/galleryPane/master/dist/gallery-pane.css" rel="stylesheet" type='text/css' />
+        <link href="resources/css/demo.css" rel="stylesheet" type='text/css' />
+
+    </head>
+    <body>
+
+        <script src="bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="bower_components/swipe-js/swipe.js"></script>
+        <script src="https://rawgit.com/davoreric/galleryPane/master/dist/scroll-slider.js"></script>
+        <script src="https://rawgit.com/davoreric/galleryPane/master/dist/gallery-pane.js"></script>
+
+        <button id="openGallery" type="button">Open gallery</button>
+
+        <script>
+
+            var galleryItems = [];
+
+            /* generate JSON start */
+
+            for (var i = 0; i < 19; i++) {
+                galleryItems.push({
+                    title: 'slika ' + i,
+                    largeImage: 'images/large/' + i + '.jpg',
+                    smallImage: 'images/small/' + i + '.jpg',
+                    // url: window.location.href + 'slika-' + i + '',
+                    socialLinks: [
+                        {className: 'facebook', title: "f", url: 'http://www.test.com/' + i},
+                        {className: 'twitter', title: "t", url: 'http://www.test.com/' + i},
+                        {className: 'googlePlus', title: "g+", url: 'http://www.test.com/' + i}
+                    ]
+                });
+            }
+
+            galleryItems.push({
+                title: 'video',
+                videoUrl: 'https://www.youtube.com/embed/qtQgbdmIO30',
+                smallImage: 'images/small/' + 5 + '.jpg'
+                // url: window.location.href + 'slika-' + i + ''
+            });
+
+            /* generate JSON end */
+
+            /* init Gallery */
+
+            $("#openGallery").on('click', function() {
+
+                new GalleryPane({
+                    items: galleryItems
+                });
+
+            });
+
+        </script>
+
+    </body>
+</html>
