@@ -34,6 +34,6 @@
   },
   "dependencies": {
     "jquery": ">=1.7",
-    "swipejs": "^2.0.8"
+    "swipejs": "^2.2.0"
   }
 }
