@@ -4,8 +4,8 @@
         <title>Gallery demo page</title>
 
         <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,800&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-        <link href="resources/css/demo.css"  rel="stylesheet" />
         <link href="../dist/gallery-pane.css"  rel="stylesheet" />
+        <link href="resources/css/demo.css"  rel="stylesheet" />
 
     </head>
     <body>
@@ -15,9 +15,13 @@
         <script src="../dist/scroll-slider.js"></script>
         <script src="../dist/gallery-pane.js"></script>
 
+        <button id="openGallery" type="button">Open gallery</button>
+
         <script>
 
             var galleryItems = [];
+
+            /* generate JSON start */
 
             for (var i = 0; i < 19; i++) {
                 galleryItems.push({
@@ -40,11 +44,17 @@
                 // url: window.location.href + 'slika-' + i + ''
             });
 
-            var gallery = new GalleryPane({
-                items: galleryItems
-            });
+            /* generate JSON end */
 
-            gallery.showThumbnails();
+            /* init Gallery */
+
+            $("#openGallery").on('click', function() {
+
+                new GalleryPane({
+                    items: galleryItems
+                });
+
+            });
 
         </script>
 

@@ -1,6 +1,9 @@
 # galleryPane
 Standalone gallery pane module with swipe slider and social integration. Supports AMD and CommonJS module integration.
 
+You can view [DEMO HERE](http://davoreric.github.io/galleryPane/).
+
+
 # Demo install
 - git clone
 - npm install

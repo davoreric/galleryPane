@@ -1,5 +1,7 @@
 bower_components/
 node_modules/
+reports/
 .sass-cache
 .DS_Store
 npm-debug.log
+selenium-debug.log

@@ -10,7 +10,8 @@
   },
   "scripts": {
     "watch": "grunt build && grunt watch",
-    "build": "grunt build"
+    "build": "grunt build",
+    "test": "nightwatch"
   },
   "repository": {
     "type": "git",
