@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/davoreric/galleryPane.svg?branch=master)](https://travis-ci.org/davoreric/galleryPane)
+[![NPM Status](https://img.shields.io/npm/v/gallery-pane.svg?style=flat-square)](https://www.npmjs.com/package/gallery-pane)
 
 # galleryPane
 Standalone gallery pane module with swipe slider and social integration. Supports AMD and CommonJS module integration.
