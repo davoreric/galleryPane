@@ -1,0 +1,24 @@
+{
+  "name": "gallery-pane",
+  "version": "0.1.8",
+  "homepage": "https://github.com/davoreric/gallery",
+  "authors": [
+    "Davor Eric <info@davoreric.com>"
+  ],
+  "description": "Standalone gallery pane module with swipe slider and social integration",
+  "main": "dist/gallery-pane.min.js",
+  "keywords": [
+    "popup",
+    "lightbox",
+    "modal",
+    "gallery"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
