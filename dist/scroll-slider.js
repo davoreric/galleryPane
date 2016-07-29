@@ -187,22 +187,27 @@
 
         scrollTo: function(itemPosition) {
 
-            var $item = this.$items.eq(itemPosition),
-                itemOffset = $item.offset().left - this.$items.eq(0).offset().left,
-                diffToCurrentOffset = itemOffset - this.slideOffset;
+            var $item = this.$items.find('[data-index="' + itemPosition + '"]').closest('li');
 
-            if (this.options.isTouch) {
-                this.offset = itemOffset;
-                this.animate(itemOffset);
-            } else {
-                if (diffToCurrentOffset + $item.outerWidth() > this.elSize) {
-                    this.slideNext();
-                } else if (diffToCurrentOffset < 0) {
-                    this.slidePrev();
+            if ($item.length !== 0) {
+
+                var itemOffset = $item.offset().left - this.$items.eq(0).offset().left,
+                    diffToCurrentOffset = itemOffset - this.slideOffset;
+
+                if (this.options.isTouch) {
+                    this.offset = itemOffset;
+                    this.animate(itemOffset);
+                } else {
+                    if (diffToCurrentOffset + $item.outerWidth() > this.elSize) {
+                        this.slideNext();
+                    } else if (diffToCurrentOffset < 0) {
+                        this.slidePrev();
+                    }
                 }
-            }
 
-            return this;
+                return this;
+
+            }
 
         },
 

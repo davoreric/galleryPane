@@ -47,6 +47,7 @@
         itemsWrapClassName: 'gpItems',
         itemClassName: 'gpItem',
         videoItemClassName: 'gpVideoItem',
+        htmlItemClassName: 'gpHtmlItem',
         itemImageClassName: 'gpItemImage',
 
         toggleThumbsBtnClassName: 'gpToggleThumbsBtn',
@@ -76,6 +77,7 @@
         appendTarget: 'body',
 
         items: [],
+        thumbsLength: 0,
         position: 0,
         continuous: false,
         slideSpeed: 300,
@@ -105,6 +107,13 @@
             this.options = $.extend(true, {}, Gallery.defaults, options);
             this.position = this.options.position;
             this.ens = '.GalleryPane' + (++instanceCounter);
+
+            this.options.thumbsLength = this.options.items.length;
+            this.options.items.filter(function(item, index) {
+                if (typeof item.smallImage === 'undefined') {
+                    this.options.thumbsLength--;
+                }
+            }.bind(this));
 
             this.render();
 
@@ -142,7 +151,7 @@
                 // callback: function(index, elem) {},
             });
 
-            this.updateDom().setImageDimensions();
+            this.updateDom().setImageDimensions().callbackOnShow(this.options.items[this.position]);
 
             this.options.afterRender && this.options.afterRender(this);
 
@@ -171,8 +180,7 @@
 
             this.setEvent(this.$el, 'click', 'thumbClassName', function(e) {
 
-                var $selectedThumb = $(e.currentTarget);
-                this.setPosition(this.$thumbs.index($selectedThumb));
+                this.setPosition($(e.currentTarget).data('index'));
 
             });
 
@@ -213,6 +221,8 @@
 
             this.$itemImages.css('max-height', this.$swipeEl.height() + 'px');
 
+            return this;
+
         },
 
         loadImage: function(position, loadAdjecent) {
@@ -224,7 +234,7 @@
 
             if (url) {
 
-                this.$itemImages.eq(normalizedPosition).attr('src', url);
+                this.$itemImages.filter('[data-index="' + normalizedPosition + '"]').attr('src', url);
 
                 if (loadAdjecent) {
                     image.onload = function() {
@@ -260,7 +270,20 @@
 
                 this.options.afterPositionChange && this.options.afterPositionChange(this);
 
+                this.callbackOnShow(item);
+
             }
+
+        },
+
+        callbackOnShow: function(item) {
+
+            if (typeof item.onFirstShowCallback !== 'undefined') {
+                item.onFirstShowCallback(this);
+                delete item.onFirstShowCallback;
+            }
+
+            item.onShowCallback && item.onShowCallback(this);
 
         },
 
@@ -288,13 +311,15 @@
         updateDom: function() {
 
             var options = this.options,
-                item = options.items[this.position];
+                item = options.items[this.position],
+                currentPage = this.position + 1;
 
             // thumbs
             if (this.thumbsSlider) {
+
                 this.thumbsSlider.scrollTo(this.position);
                 this.$thumbs.removeClass(this.options.thumbActiveClassName)
-                            .eq(this.position)
+                            .filter('[data-index="' + this.position + '"]')
                             .addClass(options.thumbActiveClassName);
             }
 
@@ -305,7 +330,14 @@
             }
 
             // pagination
-            this.$pagination.text((this.position + 1) + '/' + options.items.length);
+            if (typeof item.smallImage !== 'undefined') {
+                this.options.items.filter(function(item, index) {
+                    if (index < this.position && typeof item.smallImage === 'undefined') {
+                        currentPage--;
+                    }
+                }.bind(this));
+                this.$pagination.text(currentPage + '/' + options.thumbsLength);
+            }
 
             // social links
             if (item.socialLinks && item.socialLinks.length > 0) {
@@ -352,7 +384,12 @@
                 this.thumbsSlider = new $.ScrollSlider($(this.templates.thumbs(this.options)).appendTo(this.$el), this.options.scrollSlider);
 
                 this.$thumbs = this.thumbsSlider.$el.find(selectorFromClass(this.options.thumbClassName));
-                this.$thumbs.eq(this.position).addClass(this.options.thumbActiveClassName);
+
+                if (typeof this.options.items[this.position].smallImage !== 'undefined') {
+
+                    this.$thumbs.filter('[data-index="' + this.position + '"]').addClass(this.options.thumbActiveClassName);
+
+                }
 
             }
 
@@ -394,14 +431,14 @@
                             '</div>' +
                             '<div class="' + data.itemsWrapClassName + '">' +
                                 '<ul>' +
-                                    joinText(data.items, function(item) {
-                                        return self.slideItem(data, item);
+                                    joinText(data.items, function(item, index) {
+                                        return self.slideItem(data, item, index);
                                     }) +
                                 '</ul>' +
                             '</div>' +
                         '</div>';
             },
-            slideItem: function(data, item) {
+            slideItem: function(data, item, index) {
 
                 if (item.videoUrl) {
                     return '<li>' +
@@ -411,11 +448,16 @@
                                     '</div>' +
                                 '</div>' +
                             '</li>';
-
+                } else if (item.html) {
+                    return '<li>' +
+                                '<div class="' + data.itemClassName + '">' +
+                                    '<div class="' + data.htmlItemClassName + '">' + item.html + '</div>' +
+                                '</div>' +
+                            '</li>';
                 } else {
                     return '<li>' +
                                 '<div class="' + data.itemClassName + '">' +
-                                    '<img class="' + data.itemImageClassName + '" data-src="' + item.largeImage + '" alt="' + item.title + '" />' +
+                                    '<img class="' + data.itemImageClassName + '" data-index="' + index + '" data-src="' + item.largeImage + '" alt="' + item.title + '" />' +
                                     '<strong class="gpCaption">' + item.title + '</strong>' +
                                     ((item.source || item.author) ? '<strong class="gpCopy">' + ((item.source) ? data.sourceLabelText + ': ' + item.source : '') + ((item.source && item.author) ? ' / ' : '') + ((item.author) ? data.authorLabelText + ': ' + item.author : '') + '</strong>' : '') +
                                 '</div>' +
@@ -428,12 +470,16 @@
                 return '<div class="' + data.thumbsWrapClassName + '">' +
                             '<div class="' + data.thumbsScrollerClassName + '">' +
                                 '<ul>' +
-                                    joinText(data.items, function(item) {
-                                        return '<li>' +
-                                                    '<div class="' + data.thumbClassName + '">' +
+                                    joinText(data.items, function(item, index) {
+                                        if (typeof item.smallImage !== 'undefined') {
+                                            return '<li>' +
+                                                    '<div class="' + data.thumbClassName + '" data-index="' + index + '">' +
                                                         '<img src="' + item.smallImage + '" alt="' + item.title + '" />' +
                                                     '</div>' +
                                                 '</li>';
+                                        } else {
+                                            return '';
+                                        }
                                     }) +
                                 '</ul>' +
                             '</div>' +
