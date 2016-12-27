@@ -77,6 +77,7 @@
         appendTarget: 'body',
 
         items: [],
+        canShowAdvertising: function() { return false; },
         thumbsLength: 0,
         position: 0,
         continuous: false,
@@ -107,6 +108,7 @@
             this.options = $.extend(true, {}, Gallery.defaults, options);
             this.position = this.options.position;
             this.ens = '.GalleryPane' + (++instanceCounter);
+            this.counter = 1;
 
             this.options.thumbsLength = this.options.items.length;
             this.options.items.filter(function(item, index) {
@@ -252,27 +254,48 @@
 
         setPosition: function(position) {
 
-            var newPosition = this.normalizePosition(position),
-                item = this.options.items[newPosition];
+            if (this.options.canShowAdvertising(this.counter)) {
 
-            if (newPosition !== this.position) {
+                this.$advertisingElement = $('<div class="' + this.options.elementClassName + 'Advertising">' + this.options.getAdvertisingTemplate(this.counter) + '</div>').appendTo(this.$el);
 
-                this.position = newPosition;
+                this.$el.addClass('advertisingActive');
 
-                this.swipe.slide(newPosition);
-                this.updateDom();
-                this.loadImage(newPosition, true);
+                this.options.advertisingCallback(this.counter, this.$advertisingElement.children());
 
-                this.options.updateUrl && this.updateUrl({
-                    url: item.url,
-                    title: item.title
-                });
+            } else {
 
-                this.options.afterPositionChange && this.options.afterPositionChange(this);
+                var newPosition = this.normalizePosition(position),
+                    item = this.options.items[newPosition];
 
-                this.callbackOnShow(item);
+                if (this.$advertisingElement) {
+
+                    this.$advertisingElement.remove();
+                    this.$el.removeClass('advertisingActive');
+
+                }
+
+                if (newPosition !== this.position) {
+
+                    this.position = newPosition;
+
+                    this.swipe.slide(newPosition);
+                    this.updateDom();
+                    this.loadImage(newPosition, true);
+
+                    this.options.updateUrl && this.updateUrl({
+                        url: item.url,
+                        title: item.title
+                    });
+
+                    this.options.afterPositionChange && this.options.afterPositionChange(this);
+
+                    this.callbackOnShow(item);
+
+                }
 
             }
+
+            this.counter++;
 
         },
 

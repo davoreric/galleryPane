@@ -32,6 +32,33 @@ Invoke example:
 
     }).render();
 
+Invoke example with advertising enabled:
+
+    var gallery = new Gallery({
+
+        data: jsonData,
+        rootUrl: '/demo',
+        historyAPI: false,
+        thumbsIconClass: 'iconRpl gridIcon',
+        closeIconClass: 'iconRpl closeIcon'.
+        canShowAdvertising: function(counter) {
+
+            //return boolean if adverdtisng can be shown (eg. for advertisnin on fifth click -> "return counter === 5;")
+
+        },
+        getAdvertisingTemplate: function(counter) {
+
+            //return HTML for banner
+
+        },
+        advertisingCallback: function(counter, banner) {
+
+            //invoked after banner HTML is appended to gallery
+            //this is place for async banner invocation
+
+        }
+
+    }).render();
 
 JSON data example:
 
