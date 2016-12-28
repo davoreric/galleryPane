@@ -149,8 +149,13 @@
             this.swipe = new Swipe(this.$swipeEl.get(0), {
                 startSlide: this.position,
                 speed: this.options.slideSpeed,
-                continuous: false
-                // callback: function(index, elem) {},
+                continuous: this.options.continuous,
+                callback: function(index, elem) {
+
+                    this.position = index;
+                    this.setPosition();
+
+                }.bind(this)
             });
 
             this.updateDom().setImageDimensions().callbackOnShow(this.options.items[this.position]);
@@ -262,7 +267,7 @@
 
                 this.options.advertisingCallback(this.counter, this.$advertisingElement.children());
 
-            } else {
+            } else if (position) {
 
                 var newPosition = this.normalizePosition(position),
                     item = this.options.items[newPosition];
@@ -292,6 +297,29 @@
                     this.callbackOnShow(item);
 
                 }
+
+            } else {
+
+                var currentItem = this.options.items[this.position];
+
+                if (this.$advertisingElement) {
+
+                    this.$advertisingElement.remove();
+                    this.$el.removeClass('advertisingActive');
+
+                }
+
+                this.updateDom();
+                this.loadImage(this.position, true);
+
+                this.options.updateUrl && this.updateUrl({
+                    url: currentItem.url,
+                    title: currentItem.title
+                });
+
+                this.options.afterPositionChange && this.options.afterPositionChange(this);
+
+                this.callbackOnShow(currentItem);
 
             }
 
