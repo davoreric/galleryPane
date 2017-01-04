@@ -41,17 +41,17 @@ Invoke example with advertising enabled:
         historyAPI: false,
         thumbsIconClass: 'iconRpl gridIcon',
         closeIconClass: 'iconRpl closeIcon'.
-        canShowAdvertising: function(counter) {
+        shouldShowAdvertising: function(counter) {
 
-            //return boolean if adverdtisng can be shown (eg. for advertisnin on fifth click -> "return counter === 5;")
+            //return if advertising can be shown (eg. for advertisnin on fifth click -> "return counter === 5;")
 
         },
-        getAdvertisingTemplate: function(counter) {
+        advertisingTemplate: function(counter) {
 
             //return HTML for banner
 
         },
-        advertisingCallback: function(counter, banner) {
+        whenAdvertisingElementReady: function(counter, banner) {
 
             //invoked after banner HTML is appended to gallery
             //this is place for async banner invocation
