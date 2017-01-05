@@ -154,8 +154,10 @@
             this.swipe = new Swipe(this.$swipeEl.get(0), {
                 startSlide: this.position,
                 speed: this.options.slideSpeed,
-                continuous: false
-                // callback: function(index, elem) {},
+                continuous: this.options.continuous,
+                callback: function(index, elem) {
+                    this.setPosition(index);
+                }.bind(this)
             });
 
             this.updateDom().setImageDimensions().callbackOnShow(this.options.items[this.position]);
