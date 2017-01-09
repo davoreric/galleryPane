@@ -91,6 +91,8 @@
         },
         advertisingTemplate: function() {},
         whenAdvertisingElementReady: function($bannerElement) {},
+        advertisingCloseText: 'Skip advertising',
+        advertisingCloseClassName: 'gpAdvertisingClose',
 
         afterRender: null,
         afterPositionChange: null,
@@ -270,18 +272,21 @@
 
                 if (this.options.shouldShowAdvertising(this.positionChangeCounter)) {
 
-                    this.$advertisingElement = $('<div class="' + this.options.elementClassName + 'Advertising">' + this.options.advertisingTemplate(this) + '</div>').appendTo(this.$el);
+                    this.$advertisingElement = $('<div class="' + this.options.elementClassName + 'Advertising" />').appendTo(this.$el);
+                    this.$bannerElement = $(this.options.advertisingTemplate(this)).appendTo(this.$advertisingElement);
+
+                    $('<button class="' + this.options.advertisingCloseClassName + '">' + this.options.advertisingCloseText + '</button>')
+                        .prependTo(this.$advertisingElement)
+                        .on('click', function() {
+                            this.removeAdvertising();
+                        }.bind(this));
+
                     this.$el.addClass('advertisingActive');
-                    this.options.whenAdvertisingElementReady(this.$advertisingElement.children(), this);
+                    this.options.whenAdvertisingElementReady(this.$bannerElement, this);
 
-                    return;
+                } else if (this.$advertisingElement) {
 
-                }
-
-                if (this.$advertisingElement) {
-
-                    this.$advertisingElement.remove();
-                    this.$el.removeClass('advertisingActive');
+                    this.removeAdvertising();
 
                 }
 
@@ -301,6 +306,13 @@
                 this.callbackOnShow(item);
 
             }
+
+        },
+
+        removeAdvertising: function() {
+
+            this.$advertisingElement.remove();
+            this.$el.removeClass('advertisingActive');
 
         },
 
