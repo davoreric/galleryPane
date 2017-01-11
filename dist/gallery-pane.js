@@ -11,8 +11,8 @@
 }(this, function($, Swipe) {
 
     var instanceCounter = 0,
-        $window = $(this),
-        $document = $(this.document);
+        $window = $(window),
+        $document = $(window.document);
 
     function selectorFromClass(classes) {
 
