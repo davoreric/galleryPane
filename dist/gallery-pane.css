@@ -112,39 +112,35 @@
 .gpItems > ul > li {
   float: left;
   width: 100%;
+  height: 100%;
   position: relative;
   overflow: hidden;
-  height: 100%;
-  text-align: center;
-}
-
-.gpItems > ul > li:before {
-  content: "";
-  display: inline-block;
-  height: 100%;
-  vertical-align: middle;
 }
 
 .gpItem {
-  position: relative;
-  display: inline-block;
-  vertical-align: middle;
-  margin: 0px auto;
+  width: 100%;
+  height: 100%;
+  padding: 2em 0 7em;
   box-sizing: border-box;
-  z-index: 2020;
-  text-align: left;
-  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .gpItem > img {
   display: block;
-  width: auto;
   max-width: 100%;
-  height: auto;
-  line-height: 0;
-  box-sizing: border-box;
+  max-height: 100%;
   margin: 0 auto;
-  padding: 1em;
+}
+
+.gpInfoWrap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2em;
+  padding: 0 4em 4em;
 }
 
 .gpVideoItem {
@@ -153,6 +149,7 @@
   overflow: hidden;
   padding-top: 56.25%;
   margin: 5em 0;
+  position: relative;
 }
 
 .gpVideoItem > iframe {

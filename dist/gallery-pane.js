@@ -11,8 +11,8 @@
 }(this, function($, Swipe) {
 
     var instanceCounter = 0,
-        $window = $(window),
-        $document = $(window.document);
+        $window = $(this),
+        $document = $(this.document);
 
     function selectorFromClass(classes) {
 
@@ -66,6 +66,10 @@
         toggleSocialLinksWrapClassName: 'gpWrapSocialLinks',
         socialLinksOpenedClassName: 'gpSocialActive',
         hasSocialLinksClassName: 'gpHasSocialLinks',
+
+        infoToggleClassName: 'gpInfoToggle',
+        infoToggleButtonText: 'Show image info',
+        infoOpenedClassName: 'gpInfoActive',
 
         brandingText: 'Gallery pane',
         toggleThumbsBtnText: 'Toggle thumbs',
@@ -162,7 +166,7 @@
                 }.bind(this)
             });
 
-            this.updateDom().setImageDimensions().callbackOnShow(this.options.items[this.position]);
+            this.updateDom().callbackOnShow(this.options.items[this.position]);
 
             this.options.afterRender && this.options.afterRender(this);
 
@@ -187,7 +191,7 @@
             this.setEvent(this.$el, 'click', 'arrowNextClassName', this.next);
             this.setEvent(this.$el, 'click', 'arrowPrevClassName', this.prev);
             this.setEvent(this.$el, 'click', 'closeBtnClassName', this.close);
-            this.setEvent($window, 'resize', null, this.setImageDimensions);
+            this.setEvent(this.$el, 'click', 'infoToggleClassName', this.toggleInfo);
 
             this.setEvent(this.$el, 'click', 'thumbClassName', function(e) {
 
@@ -225,14 +229,6 @@
             } else {
                 return position;
             }
-
-        },
-
-        setImageDimensions: function() {
-
-            this.$itemImages.css('max-height', this.$swipeEl.height() + 'px');
-
-            return this;
 
         },
 
@@ -409,6 +405,12 @@
 
         },
 
+        toggleInfo: function() {
+
+            this.$el.toggleClass(this.options.infoOpenedClassName);
+
+        },
+
         toggleThumbnails: function() {
 
             this.$el.hasClass(this.options.thumbsOpenedClassName) ? this.hideThumbNails() : this.showThumbnails();
@@ -476,6 +478,7 @@
                                     }) +
                                 '</ul>' +
                             '</div>' +
+                            '<a class="' + data.infoToggleClassName + '">' + data.infoToggleButtonText + '</a>' +
                         '</div>';
             },
             slideItem: function(data, item, index) {
@@ -498,6 +501,8 @@
                     return '<li>' +
                                 '<div class="' + data.itemClassName + '">' +
                                     '<img class="' + data.itemImageClassName + '" data-index="' + index + '" data-src="' + item.largeImage + '" alt="' + item.title + '" />' +
+                                '</div>' +
+                                '<div class="gpInfoWrap">' +
                                     '<strong class="gpCaption">' + item.title + '</strong>' +
                                     ((item.source || item.author) ? '<strong class="gpCopy">' + ((item.source) ? data.sourceLabelText + ': ' + item.source : '') + ((item.source && item.author) ? ' / ' : '') + ((item.author) ? data.authorLabelText + ': ' + item.author : '') + '</strong>' : '') +
                                 '</div>' +
