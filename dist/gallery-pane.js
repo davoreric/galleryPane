@@ -44,6 +44,7 @@
         closeBtnClassName: 'gpCloseBtn',
         pagesClassName: 'gpPages',
         brandingClassName: 'gpBrand',
+        brandingUrl: null,
         itemsWrapClassName: 'gpItems',
         itemClassName: 'gpItem',
         videoItemClassName: 'gpVideoItem',
@@ -120,6 +121,7 @@
             this.position = this.options.position;
             this.ens = '.GalleryPane' + (++instanceCounter);
             this.positionChangeCounter = 0;
+            this.advertisingActive = false;
 
             this.options.thumbsLength = this.options.items.length;
             this.options.items.filter(function(item, index) {
@@ -264,42 +266,51 @@
 
             if (newPosition !== this.position) {
 
-                this.positionChangeCounter++;
-
-                if (this.options.shouldShowAdvertising(this.positionChangeCounter)) {
-
-                    this.$advertisingElement = $('<div class="' + this.options.elementClassName + 'Advertising" />').appendTo(this.$el);
-                    this.$bannerElement = $(this.options.advertisingTemplate(this)).appendTo(this.$advertisingElement);
-
-                    $('<button class="' + this.options.advertisingCloseClassName + '">' + this.options.advertisingCloseText + '</button>')
-                        .prependTo(this.$advertisingElement)
-                        .on('click', function() {
-                            this.removeAdvertising();
-                        }.bind(this));
-
-                    this.$el.addClass('advertisingActive');
-                    this.options.whenAdvertisingElementReady(this.$bannerElement, this);
-
-                } else if (this.$advertisingElement) {
+                if (this.advertisingActive) {
 
                     this.removeAdvertising();
 
+                } else {
+
+                    this.positionChangeCounter++;
+
+                    if (this.options.shouldShowAdvertising(this.positionChangeCounter)) {
+
+                        this.$advertisingElement = $('<div class="' + this.options.elementClassName + 'Advertising" />').appendTo(this.$el);
+                        this.$bannerElement = $(this.options.advertisingTemplate(this)).appendTo(this.$advertisingElement);
+
+                        $('<button class="' + this.options.advertisingCloseClassName + '">' + this.options.advertisingCloseText + '</button>')
+                            .prependTo(this.$advertisingElement)
+                            .on('click', function() {
+                                this.removeAdvertising();
+                            }.bind(this));
+
+                        this.advertisingActive = true;
+                        this.$el.addClass('advertisingActive');
+                        this.options.whenAdvertisingElementReady(this.$bannerElement, this);
+
+                    } else if (this.$advertisingElement) {
+
+                        this.removeAdvertising();
+
+                    }
+
+                    this.position = newPosition;
+
+                    this.swipe.slide(newPosition);
+                    this.updateDom();
+                    this.loadImage(newPosition, true);
+
+                    this.options.updateUrl && this.updateUrl({
+                        url: item.url,
+                        title: item.title
+                    });
+
+                    this.options.afterPositionChange && this.options.afterPositionChange(this);
+
+                    this.callbackOnShow(item);
+
                 }
-
-                this.position = newPosition;
-
-                this.swipe.slide(newPosition);
-                this.updateDom();
-                this.loadImage(newPosition, true);
-
-                this.options.updateUrl && this.updateUrl({
-                    url: item.url,
-                    title: item.title
-                });
-
-                this.options.afterPositionChange && this.options.afterPositionChange(this);
-
-                this.callbackOnShow(item);
 
             }
 
@@ -307,6 +318,7 @@
 
         removeAdvertising: function() {
 
+            this.advertisingActive = false;
             this.$advertisingElement.remove();
             this.$el.removeClass('advertisingActive');
 
@@ -466,7 +478,7 @@
 
                 return '<div class="' + data.elementClassName + '">' +
                             '<div class="' + data.headerClassName + '">' +
-                                '<div class="' + data.brandingClassName + '">' + data.brandingText + '</div>' +
+                                ((data.brandingUrl !== null) ? '<a href="' + data.brandingUrl + '" class="' + data.brandingClassName + '">' + data.brandingText + '</a>' : '<div class="' + data.brandingClassName + '">' + data.brandingText + '</div>') +
                                 '<p class="' + data.pagesClassName + '"></p>' +
                                 '<button type="button" title="' + data.toggleThumbsBtnText + '" class="' + data.toggleThumbsBtnClassName + '">' + data.toggleThumbsBtnText + '</button>' +
                                 '<button type="button" title="' + data.closeBtnText + '" class="' + data.closeBtnClassName + '">' + data.closeBtnText + '</button>' +
