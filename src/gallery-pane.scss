@@ -166,7 +166,9 @@
 
     overflow:hidden;
 
-    &.scrollSliderTouch {
+    &.gpScrollSliderTouch {
+
+        overflow: scroll; -webkit-overflow-scrolling: touch;
 
     }
 

@@ -1,18 +1,18 @@
-(function(root, factory) {
+(function(factory) {
 
     if (typeof define === 'function' && define.amd) {
         define(['jquery', 'swipejs', './scroll-slider'], factory);
     } else if (typeof module === 'object' && module.exports) {
         module.exports = factory(require('jquery'), require('swipejs'), require('./scroll-slider'));
     } else {
-        root.GalleryPane = factory(root.jQuery, root.Swipe);
+        window.GalleryPane = factory(window.jQuery, window.Swipe);
     }
 
-}(this, function($, Swipe) {
+}(function($, Swipe) {
 
     var instanceCounter = 0,
-        $window = $(this),
-        $document = $(this.document);
+        $window = $(window),
+        $document = $(window.document);
 
     function selectorFromClass(classes) {
 

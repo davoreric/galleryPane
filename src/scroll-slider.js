@@ -1,18 +1,17 @@
-(function(root, factory) {
+(function(factory) {
 
     if (typeof define === 'function' && define.amd) {
         define(['jquery'], factory);
     } else if (typeof module === 'object' && module.exports) {
         module.exports = factory(require('jquery'));
     } else {
-        root.ScrollSlider = factory(jQuery);
+        window.ScrollSlider = factory(window.jQuery);
     }
 
-}(this, function($) {
+}(function($) {
 
-    var root = this,
-        instanceCounter = 0,
-        $window = $(root);
+    var instanceCounter = 0,
+        $window = $(window);
 
     function selectorFromClass(classes) {
 

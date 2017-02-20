@@ -252,6 +252,11 @@
   overflow: hidden;
 }
 
+.gpThumbsScroller.gpScrollSliderTouch {
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
 .gpThumbsScroller > ul {
   display: table;
   margin: 0;
