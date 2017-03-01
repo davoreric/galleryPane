@@ -89,6 +89,7 @@
         navigateWithKeys: true,
         closeOnEscapeKey: true,
         updateUrl: true,
+        shouldPushState: true,
         toggleSocialLinks: false,
 
         shouldShowAdvertising: function(positionChangeCounter) {
@@ -339,12 +340,24 @@
 
             if (!this.startHistoryState) {
 
-                this.startHistoryState = {
-                    url: window.location.href,
-                    title: document.title
-                };
+                if (this.options.startHistoryState) {
 
-                history.pushState({}, data.title, data.url);
+                    this.startHistoryState = this.options.startHistoryState;
+
+                } else {
+
+                    this.startHistoryState = {
+                        url: window.location.href,
+                        title: document.title
+                    };
+
+                }
+
+                if (this.options.shouldPushState) {
+
+                    history.pushState({}, data.title, data.url);
+
+                }
 
             } else {
 
