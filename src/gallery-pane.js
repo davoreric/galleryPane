@@ -89,7 +89,6 @@
         navigateWithKeys: true,
         closeOnEscapeKey: true,
         updateUrl: true,
-        shouldPushState: true,
         toggleSocialLinks: false,
 
         shouldShowAdvertising: function(positionChangeCounter) {
@@ -353,18 +352,9 @@
 
                 }
 
-                if (this.options.shouldPushState) {
-
-                    history.pushState({}, data.title, data.url);
-
-                }
-
-            } else {
-
-                history.replaceState({}, data.title, data.url);
-
             }
 
+            history.replaceState({}, data.title, data.url);
             data.title && (document.title = data.title);
 
         },
