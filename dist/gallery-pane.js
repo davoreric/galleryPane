@@ -89,7 +89,6 @@
         navigateWithKeys: true,
         closeOnEscapeKey: true,
         updateUrl: true,
-        shouldPushState: true,
         toggleSocialLinks: false,
 
         shouldShowAdvertising: function(positionChangeCounter) {
@@ -190,12 +189,21 @@
 
         setupEvents: function() {
 
-            this.setEvent(this.$el, 'click', 'toggleThumbsBtnClassName', this.toggleThumbnails);
-            this.setEvent(this.$el, 'click', 'arrowNextClassName', this.next);
-            this.setEvent(this.$el, 'click', 'arrowPrevClassName', this.prev);
-            this.setEvent(this.$el, 'click', 'closeBtnClassName', this.close);
-            this.setEvent(this.$el, 'click', 'infoToggleClassName', this.toggleInfo);
-
+            this.setEvent(this.$el, 'click', 'toggleThumbsBtnClassName', function() {
+                this.toggleThumbnails();
+            });
+            this.setEvent(this.$el, 'click', 'arrowNextClassName', function() {
+                this.next();
+            });
+            this.setEvent(this.$el, 'click', 'arrowPrevClassName', function() {
+                this.prev();
+            });
+            this.setEvent(this.$el, 'click', 'closeBtnClassName', function() {
+                this.close();
+            });
+            this.setEvent(this.$el, 'click', 'infoToggleClassName', function() {
+                this.toggleInfo();
+            });
             this.setEvent(this.$el, 'click', 'thumbClassName', function(e) {
 
                 this.setPosition($(e.currentTarget).data('index'));
@@ -215,11 +223,15 @@
 
             if (this.options.toggleSocialLinks) {
 
-                this.setEvent(this.$el, 'click', 'toggleSocialLinksBtnClassName', this.toggleSocialLinks);
+                this.setEvent(this.$el, 'click', 'toggleSocialLinksBtnClassName', function() {
+                    this.toggleSocialLinks();
+                });
 
             }
 
-            this.options.updateUrl && this.setEvent($window, 'popstate', null, this.close);
+            this.options.updateUrl && this.setEvent($window, 'popstate', null, function() {
+                this.close();
+            });
 
         },
 
@@ -353,18 +365,9 @@
 
                 }
 
-                if (this.options.shouldPushState) {
-
-                    history.pushState({}, data.title, data.url);
-
-                }
-
-            } else {
-
-                history.replaceState({}, data.title, data.url);
-
             }
 
+            history.replaceState({}, data.title, data.url);
             data.title && (document.title = data.title);
 
         },
