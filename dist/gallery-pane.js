@@ -79,6 +79,8 @@
         closeBtnText: 'Close gallery',
         sourceLabelText: 'Source',
         authorLabelText: 'Author',
+        showImageInfoLabel: 'Show more',
+        hideImageInfoLabel: 'Close',
 
         appendTarget: 'body',
 
@@ -271,14 +273,14 @@
         showInfoText: function() {
 
             this.$el.find('.gpInfoWrap').addClass('expanded');
-            this.$el.find('.toggleText').html('Zatvori');
+            this.$el.find('.toggleImageInfo').html(this.options.hideImageInfoLabel);
 
         },
 
         hideInfoText: function() {
 
             this.$el.find('.gpInfoWrap').removeClass('expanded');
-            this.$el.find('.toggleText').html('Prikaži više');
+            this.$el.find('.toggleImageInfo').html(this.options.showImageInfoLabel);
 
         },
 
@@ -539,7 +541,7 @@
 
                 var self = this;
 
-                return '<div class="' + ((data.shouldShowSidebarAd()) ? ('hasSidebarBanner ' + data.elementClassName) : data.elementClassName) + '">' +
+                return '<div class="' + (data.shouldShowSidebarAd() ? 'hasSidebarBanner ' : '') + data.elementClassName + '">' +
                             '<div class="' + data.headerClassName + '">' +
                                 ((data.brandingUrl !== null) ? '<a href="' + data.brandingUrl + '" class="' + data.brandingClassName + '">' + data.brandingText + '</a>' : '<div class="' + data.brandingClassName + '">' + data.brandingText + '</div>') +
                                 '<p class="' + data.pagesClassName + '"></p>' +
@@ -557,9 +559,7 @@
                                 '</div>' +
                                 '<a class="' + data.infoToggleClassName + '">' + data.infoToggleButtonText + '</a>' +
                             '</div>' +
-                            '<div class="sideBanner">' +
-                                (data.shouldShowSidebarAd() ? data.sidebarAdTemplate(this) : '') +
-                            '</div>' +
+                            (data.shouldShowSidebarAd() ? '<div class="sideBanner">' + data.sidebarAdTemplate(this) + '</div>' : '') +
                         '</div>';
             },
             slideItem: function(data, item, index) {
@@ -587,7 +587,7 @@
                                     '<strong class="gpCaption">' + item.title + '</strong>' +
                                     (item.text !== null ? ('<div class="gpText">' + item.text + '</div>') : '') +
                                     ((item.source || item.author) ? '<strong class="gpCopy">' + ((item.source) ? data.sourceLabelText + ': ' + item.source : '') + ((item.source && item.author) ? ' / ' : '') + ((item.author) ? data.authorLabelText + ': ' + item.author : '') + '</strong>' : '') +
-                                    (item.text !== null ? ('<strong class="toggleText">' + 'Prikaži više' + '</strong>') : '') +
+                                    (item.text !== null ? ('<strong class="toggleImageInfo">' + data.showImageInfoLabel + '</strong>') : '') +
                                 '</div>' +
                             '</li>';
 
