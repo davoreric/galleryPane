@@ -68,6 +68,7 @@
         socialLinksOpenedClassName: 'gpSocialActive',
         hasSocialLinksClassName: 'gpHasSocialLinks',
 
+        infoWrapClassName: 'gpInfoWrap',
         infoToggleClassName: 'gpInfoToggle',
         infoToggleButtonText: 'Show image info',
         infoOpenedClassName: 'gpInfoActive',
@@ -78,6 +79,8 @@
         closeBtnText: 'Close gallery',
         sourceLabelText: 'Source',
         authorLabelText: 'Author',
+        showImageInfoLabel: 'Show more',
+        hideImageInfoLabel: 'Close',
 
         appendTarget: 'body',
 
@@ -98,6 +101,12 @@
         whenAdvertisingElementReady: function($bannerElement) {},
         advertisingCloseText: 'Skip advertising',
         advertisingCloseClassName: 'gpAdvertisingClose',
+
+        shouldShowSidebarAd: function() {
+            return false;
+        },
+        sidebarAdTemplate: function() {},
+        popupAdTemplate: function() {},
 
         afterRender: null,
         afterPositionChange: null,
@@ -230,8 +239,48 @@
             }
 
             this.options.updateUrl && this.setEvent($window, 'popstate', null, function() {
+
                 this.close();
+
             });
+
+            this.setEvent(this.$el, 'click', 'infoWrapClassName', function(e) {
+
+                this.$el.find('.gpInfoWrap').hasClass('expanded') ? this.hideInfoText() : this.showInfoText();
+
+            });
+
+            this.setEvent(this.$el, 'click', 'itemClassName', function(e) {
+
+                this.$el.hasClass('fullScreenMode') ? this.exitFullScreenMode() : this.enterFullScreenMode();
+
+            });
+
+        },
+
+        enterFullScreenMode: function() {
+
+            this.$el.addClass('fullScreenMode');
+
+        },
+
+        exitFullScreenMode: function() {
+
+            this.$el.removeClass('fullScreenMode');
+
+        },
+
+        showInfoText: function() {
+
+            this.$el.find('.gpInfoWrap').addClass('expanded');
+            this.$el.find('.toggleImageInfo').html(this.options.hideImageInfoLabel);
+
+        },
+
+        hideInfoText: function() {
+
+            this.$el.find('.gpInfoWrap').removeClass('expanded');
+            this.$el.find('.toggleImageInfo').html(this.options.showImageInfoLabel);
 
         },
 
@@ -492,21 +541,25 @@
 
                 var self = this;
 
-                return '<div class="' + data.elementClassName + '">' +
+                return '<div class="' + (data.shouldShowSidebarAd() ? 'hasSidebarBanner ' : '') + data.elementClassName + '">' +
                             '<div class="' + data.headerClassName + '">' +
                                 ((data.brandingUrl !== null) ? '<a href="' + data.brandingUrl + '" class="' + data.brandingClassName + '">' + data.brandingText + '</a>' : '<div class="' + data.brandingClassName + '">' + data.brandingText + '</div>') +
                                 '<p class="' + data.pagesClassName + '"></p>' +
                                 '<button type="button" title="' + data.toggleThumbsBtnText + '" class="' + data.toggleThumbsBtnClassName + '">' + data.toggleThumbsBtnText + '</button>' +
                                 '<button type="button" title="' + data.closeBtnText + '" class="' + data.closeBtnClassName + '">' + data.closeBtnText + '</button>' +
                             '</div>' +
-                            '<div class="' + data.itemsWrapClassName + '">' +
-                                '<ul>' +
-                                    joinText(data.items, function(item, index) {
-                                        return self.slideItem(data, item, index);
-                                    }) +
-                                '</ul>' +
+                            '<div class="gpContent">' +
+                                '<div class="' + data.itemsWrapClassName + '">' +
+                                    '<ul>' +
+                                        joinText(data.items, function(item, index) {
+                                            return self.slideItem(data, item, index);
+                                        }) +
+                                    '</ul>' +
+                                    data.popupAdTemplate(this) +
+                                '</div>' +
+                                '<a class="' + data.infoToggleClassName + '">' + data.infoToggleButtonText + '</a>' +
                             '</div>' +
-                            '<a class="' + data.infoToggleClassName + '">' + data.infoToggleButtonText + '</a>' +
+                            (data.shouldShowSidebarAd() ? '<div class="sideBanner">' + data.sidebarAdTemplate(this) + '</div>' : '') +
                         '</div>';
             },
             slideItem: function(data, item, index) {
@@ -530,9 +583,11 @@
                                 '<div class="' + data.itemClassName + '">' +
                                     '<img class="' + data.itemImageClassName + '" data-index="' + index + '" data-src="' + item.largeImage + '" alt="' + item.title + '" />' +
                                 '</div>' +
-                                '<div class="gpInfoWrap">' +
+                                '<div class="' + data.infoWrapClassName + '">' +
                                     '<strong class="gpCaption">' + item.title + '</strong>' +
+                                    (item.text !== null ? ('<div class="gpText">' + item.text + '</div>') : '') +
                                     ((item.source || item.author) ? '<strong class="gpCopy">' + ((item.source) ? data.sourceLabelText + ': ' + item.source : '') + ((item.source && item.author) ? ' / ' : '') + ((item.author) ? data.authorLabelText + ': ' + item.author : '') + '</strong>' : '') +
+                                    (item.text !== null ? ('<strong class="toggleImageInfo">' + data.showImageInfoLabel + '</strong>') : '') +
                                 '</div>' +
                             '</li>';
 
