@@ -555,7 +555,7 @@
                                             return self.slideItem(data, item, index);
                                         }) +
                                     '</ul>' +
-                                    data.popupAdTemplate(this) +
+                                    (typeof data.popupAdTemplate(this) === 'undefined' ? '' : data.popupAdTemplate(this)) +
                                 '</div>' +
                                 '<a class="' + data.infoToggleClassName + '">' + data.infoToggleButtonText + '</a>' +
                             '</div>' +
@@ -585,9 +585,9 @@
                                 '</div>' +
                                 '<div class="' + data.infoWrapClassName + '">' +
                                     '<strong class="gpCaption">' + item.title + '</strong>' +
-                                    (item.text !== null ? ('<div class="gpText">' + item.text + '</div>') : '') +
+                                    ((typeof item.text === 'undefined' || item.text === null) ? '' : ('<div class="gpText">' + item.text + '</div>')) +
                                     ((item.source || item.author) ? '<strong class="gpCopy">' + ((item.source) ? data.sourceLabelText + ': ' + item.source : '') + ((item.source && item.author) ? ' / ' : '') + ((item.author) ? data.authorLabelText + ': ' + item.author : '') + '</strong>' : '') +
-                                    (item.text !== null ? ('<strong class="toggleImageInfo">' + data.showImageInfoLabel + '</strong>') : '') +
+                                    ((typeof item.text === 'undefined' || item.text === null) ? '' : ('<strong class="toggleImageInfo">' + data.showImageInfoLabel + '</strong>')) +
                                 '</div>' +
                             '</li>';
 
