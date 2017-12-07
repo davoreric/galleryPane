@@ -31,6 +31,12 @@
         return text;
     }
 
+    function truncateString(string, limit) {
+
+        return (string.length > limit) ? string.substr(0, limit - 1) + '&hellip;' : string;
+
+    }
+
     function Gallery() {
 
         this.initialize.apply(this, arguments);
@@ -81,6 +87,7 @@
         authorLabelText: 'Author',
         showImageInfoLabel: 'Show more',
         hideImageInfoLabel: 'Close',
+        shortTextLength: 100,
 
         appendTarget: 'body',
 
@@ -154,6 +161,24 @@
         render: function() {
 
             this.$el = $(this.templates.main(this.options));
+
+            if (this.options.shouldShowSidebarAd()) {
+
+                this.$el.addClass('hasSidebarBanner');
+                this.$sidebarElement = $('<div class="sideBanner"></div>').appendTo(this.$el);
+                this.$sideBanner = $(this.options.sidebarAdTemplate()).appendTo(this.$sidebarElement);
+
+                this.options.whenAdvertisingElementReady(this.$sideBanner, this);
+
+            }
+
+            if (typeof this.options.popupAdTemplate(this) !== 'undefined') {
+
+                this.$popupAdBanner = $(this.options.popupAdTemplate()).appendTo(this.$el.find('.gpItems'));
+
+                this.options.whenAdvertisingElementReady(this.$popupAdBanner, this);
+
+            }
 
             if (this.options.items.length > 1) {
                 this.$arrowsCont = $(this.templates.arrows(this.options)).appendTo(this.$el);
@@ -541,7 +566,7 @@
 
                 var self = this;
 
-                return '<div class="' + (data.shouldShowSidebarAd() ? 'hasSidebarBanner ' : '') + data.elementClassName + '">' +
+                return '<div class="' + data.elementClassName + '">' +
                             '<div class="' + data.headerClassName + '">' +
                                 ((data.brandingUrl !== null) ? '<a href="' + data.brandingUrl + '" class="' + data.brandingClassName + '">' + data.brandingText + '</a>' : '<div class="' + data.brandingClassName + '">' + data.brandingText + '</div>') +
                                 '<p class="' + data.pagesClassName + '"></p>' +
@@ -555,14 +580,27 @@
                                             return self.slideItem(data, item, index);
                                         }) +
                                     '</ul>' +
-                                    (typeof data.popupAdTemplate(this) === 'undefined' ? '' : data.popupAdTemplate(this)) +
                                 '</div>' +
                                 '<a class="' + data.infoToggleClassName + '">' + data.infoToggleButtonText + '</a>' +
                             '</div>' +
-                            (data.shouldShowSidebarAd() ? '<div class="sideBanner">' + data.sidebarAdTemplate(this) + '</div>' : '') +
                         '</div>';
             },
             slideItem: function(data, item, index) {
+
+                var shortText;
+                var shouldShowShortText;
+
+                if (typeof item.text === 'undefined' || item.text === null) {
+
+                    shortText = '';
+                    shouldShowShortText = false;
+
+                } else {
+
+                    shortText = truncateString(item.text, data.shortTextLength);
+                    shouldShowShortText = item.text.length > shortText.length;
+
+                }
 
                 if (item.videoUrl) {
                     return '<li>' +
@@ -585,9 +623,10 @@
                                 '</div>' +
                                 '<div class="' + data.infoWrapClassName + '">' +
                                     '<strong class="gpCaption">' + item.title + '</strong>' +
+                                    ((typeof item.text === 'undefined' || item.text === null) ? '' : ('<div class="gpShortText">' + shortText + '</div>')) +
                                     ((typeof item.text === 'undefined' || item.text === null) ? '' : ('<div class="gpText">' + item.text + '</div>')) +
                                     ((item.source || item.author) ? '<strong class="gpCopy">' + ((item.source) ? data.sourceLabelText + ': ' + item.source : '') + ((item.source && item.author) ? ' / ' : '') + ((item.author) ? data.authorLabelText + ': ' + item.author : '') + '</strong>' : '') +
-                                    ((typeof item.text === 'undefined' || item.text === null) ? '' : ('<strong class="toggleImageInfo">' + data.showImageInfoLabel + '</strong>')) +
+                                    ((typeof item.text === 'undefined' || item.text === null || shouldShowShortText === false) ? '' : ('<strong class="toggleImageInfo">' + data.showImageInfoLabel + '</strong>')) +
                                 '</div>' +
                             '</li>';
 
