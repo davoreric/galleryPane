@@ -1,6 +1,6 @@
 {
   "name": "gallery-pane",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Standalone gallery pane module with swipe slider and social integration",
   "main": "src/gallery-pane.js",
   "license": "MIT",
