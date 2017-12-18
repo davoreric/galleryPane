@@ -168,15 +168,11 @@
                 this.$sidebarElement = $('<div class="sideBanner"></div>').appendTo(this.$el);
                 this.$sideBanner = $(this.options.sidebarAdTemplate()).appendTo(this.$sidebarElement);
 
-                this.options.whenAdvertisingElementReady(this.$sideBanner, this);
-
             }
 
             if (typeof this.options.popupAdTemplate(this) !== 'undefined') {
 
                 this.$popupAdBanner = $(this.options.popupAdTemplate()).appendTo(this.$el.find('.gpItems'));
-
-                this.options.whenAdvertisingElementReady(this.$popupAdBanner, this);
 
             }
 
@@ -192,6 +188,18 @@
             this.$socialLinks = $('<div>').addClass(this.options.socialLinksClassName).appendTo(this.$el);
 
             this.$el.appendTo(this.options.appendTarget);
+
+            if (this.options.shouldShowSidebarAd()) {
+
+                this.options.whenAdvertisingElementReady(this.$sideBanner, this);
+
+            }
+
+            if (typeof this.options.popupAdTemplate(this) !== 'undefined') {
+
+                this.options.whenAdvertisingElementReady(this.$popupAdBanner, this);
+
+            }
 
             this.swipe = new Swipe(this.$swipeEl.get(0), {
                 startSlide: this.position,
