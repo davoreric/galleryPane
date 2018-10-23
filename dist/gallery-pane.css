@@ -122,9 +122,7 @@
   height: 100%;
   padding: 2em 0 7em;
   box-sizing: border-box;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: block;
 }
 
 .gpItem > img {
